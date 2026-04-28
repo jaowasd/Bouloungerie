@@ -1,0 +1,2521 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolo Turbo Coupé Confeitado — Boulangerie Turbo</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#c8a84b;--gold-dim:rgba(200,168,75,0.15);
+  --gold-glow:0 0 40px rgba(200,168,75,0.25);
+  --bg:#000;--bg1:#050505;--bg2:#080808;--bg3:#0a0a0a;--bg4:#0d0d0d;
+  --line:rgba(255,255,255,0.07);--text-dim:rgba(255,255,255,0.45);
+  --text-mid:rgba(255,255,255,0.65);
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+
+/* ── ONBOARDING ── */
+#onboard{position:fixed;inset:0;z-index:99999;background:#000;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .8s var(--ease),transform .8s var(--ease)}
+#onboard.hide{opacity:0;transform:scale(1.04);pointer-events:none}
+.ob-wrap{text-align:center;max-width:400px;padding:2rem;
+  animation:obIn .9s var(--ease) .2s both}
+@keyframes obIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.ob-logo{font-size:11px;font-weight:700;letter-spacing:5px;text-transform:uppercase;
+  color:rgba(255,255,255,.4);margin-bottom:3rem;display:flex;align-items:center;justify-content:center;gap:8px}
+.ob-logo em{font-style:normal;color:var(--gold)}
+.ob-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;letter-spacing:1px;
+  margin-bottom:.5rem;line-height:1.1}
+.ob-title strong{font-weight:700;display:block;color:var(--gold)}
+.ob-sub{font-size:13px;color:var(--text-dim);letter-spacing:.5px;margin-bottom:2.5rem;line-height:1.6}
+.ob-input-wrap{position:relative;margin-bottom:1.2rem}
+.ob-input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.2);
+  padding:14px 0;font-size:1rem;color:#fff;letter-spacing:.5px;outline:none;
+  transition:border-color .3s;font-family:inherit;text-align:center}
+.ob-input:focus{border-bottom-color:var(--gold)}
+.ob-input::placeholder{color:rgba(255,255,255,.25);font-size:.9rem}
+.ob-input-line{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:0;height:1px;background:var(--gold);transition:width .4s var(--ease)}
+.ob-input:focus~.ob-input-line{width:100%}
+.ob-btn{margin-top:.5rem;width:100%;padding:14px;background:var(--gold);color:#000;
+  font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .3s,opacity .2s}
+.ob-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(200,168,75,.5)}
+.ob-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.ob-skip{margin-top:1.2rem;font-size:10px;color:rgba(255,255,255,.2);
+  letter-spacing:2px;text-transform:uppercase;cursor:pointer;
+  background:none;border:none;transition:color .2s}
+.ob-skip:hover{color:rgba(255,255,255,.5)}
+.ob-deco{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:500px;height:500px;border:1px solid rgba(200,168,75,.06);border-radius:0;
+  animation:obRotate 20s linear infinite;pointer-events:none}
+.ob-deco2{width:700px;height:700px;animation-duration:30s;animation-direction:reverse;
+  border-color:rgba(200,168,75,.03)}
+@keyframes obRotate{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+/* ── BACK TO TOP ── */
+#btt{position:fixed;bottom:2rem;right:2rem;z-index:400;
+  width:44px;height:44px;background:rgba(0,0,0,.8);border:1px solid rgba(200,168,75,.4);
+  color:var(--gold);font-size:.9rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(10px);pointer-events:none;
+  transition:opacity .3s,transform .3s var(--ease),border-color .3s,box-shadow .3s;
+  backdrop-filter:blur(8px)}
+#btt.show{opacity:1;transform:translateY(0);pointer-events:all}
+#btt:hover{border-color:var(--gold);box-shadow:0 0 16px rgba(200,168,75,.3)}
+
+/* ── SHINE BUTTON EFFECT ── */
+.shine{position:relative;overflow:hidden}
+.shine::before{content:'';position:absolute;top:0;left:-75%;width:50%;height:100%;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.18),transparent);
+  transform:skewX(-20deg);transition:left .6s var(--ease);pointer-events:none}
+.shine:hover::before{left:125%}
+
+/* ── 3D CARD TILT ── */
+.tilt{transform-style:preserve-3d;transition:transform .15s ease,box-shadow .3s}
+.tilt:hover{box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 30px rgba(200,168,75,.08)}
+
+/* ── CONTACT SECTION ── */
+.contato{background:var(--bg1);padding:7rem 5rem;position:relative;overflow:hidden}
+.contato::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.3}
+.contato::after{content:'';position:absolute;bottom:0;left:0;
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(200,168,75,.07) 0%,transparent 70%);pointer-events:none}
+.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:rgba(255,255,255,.05);margin-top:3rem}
+.contact-card{background:var(--bg1);padding:2.5rem;position:relative;overflow:hidden;
+  cursor:pointer;transition:background .3s}
+.contact-card:hover{background:#0d0d0d}
+.contact-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--gold);transform:scaleX(0);transform-origin:left;
+  transition:transform .45s var(--ease)}
+.contact-card:hover::after{transform:scaleX(1)}
+.cc-icon{width:52px;height:52px;border:1px solid rgba(200,168,75,.3);
+  display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;
+  font-size:1.3rem;transition:background .3s,box-shadow .3s,border-color .3s}
+.contact-card:hover .cc-icon{background:rgba(200,168,75,.1);border-color:var(--gold);
+  box-shadow:0 0 18px rgba(200,168,75,.25)}
+.cc-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.cc-main{font-size:1rem;font-weight:500;margin-bottom:.4rem;letter-spacing:.3px}
+.cc-sub{font-size:12px;color:var(--text-dim);line-height:1.5;margin-bottom:1.5rem}
+.cc-btn{display:inline-flex;align-items:center;gap:8px;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#000;
+  background:var(--gold);padding:10px 20px;border:none;cursor:pointer;text-decoration:none;
+  transition:transform .2s var(--ease),box-shadow .3s}
+.cc-btn:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(200,168,75,.45)}
+.cc-btn.ghost{background:transparent;color:var(--gold);border:1px solid rgba(200,168,75,.4)}
+.cc-btn.ghost:hover{background:rgba(200,168,75,.08);border-color:var(--gold)}
+.cc-whatsapp{background:#25D366;color:#fff}
+.cc-whatsapp:hover{box-shadow:0 4px 16px rgba(37,211,102,.4)}
+.contact-info-strip{display:flex;gap:3rem;margin-top:3rem;padding-top:2rem;
+  border-top:1px solid var(--line);flex-wrap:wrap}
+.cis-item{display:flex;flex-direction:column;gap:4px}
+.cis-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim)}
+.cis-value{font-size:14px;font-weight:500;color:#fff}
+
+/* ── ORDER MODAL ── */
+#modal{position:fixed;inset:0;z-index:8000;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .4s;backdrop-filter:blur(12px);
+  background:rgba(0,0,0,.85)}
+#modal.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--bg4);border:1px solid var(--line);
+  max-width:520px;width:90%;position:relative;
+  transform:scale(.93) translateY(20px);transition:transform .5s var(--ease);
+  box-shadow:0 40px 120px rgba(0,0,0,.8),0 0 0 1px rgba(200,168,75,.08)}
+#modal.open .modal-box{transform:scale(1) translateY(0)}
+.modal-top{padding:2.5rem 2.5rem 0;border-bottom:1px solid var(--line)}
+.modal-top-gold{height:2px;background:linear-gradient(90deg,var(--gold),rgba(200,168,75,.3),transparent);margin-bottom:2rem}
+.modal-greeting{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.modal-title{font-size:1.5rem;font-weight:300;margin-bottom:1.5rem}
+.modal-body{padding:2rem 2.5rem}
+.modal-summary{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem}
+.ms-line{display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.ms-line:last-child{border-bottom:none}
+.ms-line span:first-child{color:var(--text-dim)}
+.ms-line span:last-child{font-weight:500}
+.ms-total{display:flex;justify-content:space-between;align-items:baseline;
+  padding-top:1rem;margin-top:.5rem;border-top:1px solid rgba(200,168,75,.2)}
+.ms-total span:first-child{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)}
+.ms-total span:last-child{font-size:1.8rem;font-weight:300;color:var(--gold)}
+.modal-footer{padding:0 2.5rem 2.5rem;display:flex;gap:10px}
+.modal-confirm{flex:1;padding:13px;background:var(--gold);color:#000;
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .3s}
+.modal-confirm:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(200,168,75,.45)}
+.modal-cancel{padding:13px 20px;background:transparent;color:var(--text-dim);
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;border:1px solid var(--line);cursor:pointer;
+  transition:border-color .2s,color .2s}
+.modal-cancel:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.modal-close{position:absolute;top:1.2rem;right:1.5rem;background:none;border:none;
+  color:var(--text-dim);font-size:1.2rem;cursor:pointer;transition:color .2s,transform .2s}
+.modal-close:hover{color:#fff;transform:rotate(90deg)}
+
+/* ── MODAL SUCCESS ── */
+.modal-success{text-align:center;padding:3rem 2.5rem;display:none}
+.modal-success.show{display:block;animation:obIn .5s var(--ease)}
+.success-icon{font-size:3rem;margin-bottom:1rem;animation:successPop .5s var(--ease) .1s both}
+@keyframes successPop{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{font-size:1.3rem;font-weight:300;margin-bottom:.5rem}
+.success-sub{font-size:13px;color:var(--text-dim);line-height:1.6}
+
+/* ── WELCOME CHIP in NAV ── */
+.nav-welcome{font-size:10px;color:var(--text-dim);letter-spacing:1px;
+  border:1px solid var(--line);padding:5px 12px;display:none;
+  animation:fadeIn .5s var(--ease)}
+.nav-welcome em{font-style:normal;color:var(--gold);font-weight:600}
+
+/* ── HERO ZOOM ── */
+@keyframes heroZoom{0%{transform:scale(1)}100%{transform:scale(1.08)}}
+.hero-bg img{animation:heroZoom 18s ease-in-out infinite alternate}
+
+/* ── BLUR REVEAL ── */
+.reveal{filter:blur(4px)}
+.reveal.on{filter:blur(0)}
+.reveal-l{filter:blur(3px)}
+.reveal-l.on{filter:blur(0)}
+.reveal-r{filter:blur(3px)}
+.reveal-r.on{filter:blur(0)}
+
+/* ── NAME HIGHLIGHT ── */
+.name-hl{color:var(--gold);font-weight:600}
+
+/* ── PRICE FLOAT BAR ── */
+.price-float{position:sticky;bottom:1.5rem;z-index:300;margin-top:2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(5,5,5,0.95);border:1px solid rgba(200,168,75,.35);
+  padding:1.1rem 2rem;backdrop-filter:blur(16px);
+  box-shadow:0 8px 40px rgba(0,0,0,.6),0 0 0 1px rgba(200,168,75,.08),var(--gold-glow)}
+.price-float-left{display:flex;flex-direction:column;gap:3px}
+.price-float-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim)}
+.price-float-val{font-size:1.6rem;font-weight:300;color:var(--gold);
+  transition:transform .25s var(--ease);letter-spacing:-0.5px}
+.price-float-val.bump{animation:priceBump .35s var(--ease)}
+@keyframes priceBump{0%{transform:scale(1)}50%{transform:scale(1.12);color:#e8c86b}100%{transform:scale(1)}}
+.price-float-detail{font-size:10px;color:var(--text-dim);letter-spacing:.5px}
+.price-float-btn{background:var(--gold);color:#000;padding:11px 24px;font-size:10px;
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;
+  white-space:nowrap;transition:transform .2s var(--ease),box-shadow .3s;position:relative;overflow:hidden}
+.price-float-btn:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(200,168,75,.45)}
+
+/* ── BTN LOADING STATE ── */
+.btn-loading{pointer-events:none;opacity:.7}
+.btn-loading::after{content:'';display:inline-block;width:12px;height:12px;
+  border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;
+  animation:spin .6s linear infinite;margin-left:8px;vertical-align:middle}
+.btn-loading-white::after{border-color:rgba(255,255,255,.3);border-top-color:#fff}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── TOAST NOTIFICATION ── */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);
+  z-index:10000;background:rgba(10,10,10,.97);border:1px solid var(--gold);
+  padding:1rem 2rem;font-size:12px;letter-spacing:1px;
+  opacity:0;pointer-events:none;transition:opacity .35s,transform .35s var(--ease);
+  display:flex;align-items:center;gap:10px;backdrop-filter:blur(12px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast-icon{font-size:1rem}
+.toast-msg{color:rgba(255,255,255,.85)}
+
+/* SCROLL PROGRESS */
+#sp{position:fixed;top:0;left:0;height:2px;width:0%;z-index:9999;
+  background:linear-gradient(90deg,var(--gold),#e8c86b,var(--gold));
+  box-shadow:0 0 8px rgba(200,168,75,0.7);transition:width .1s linear}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;
+  padding:0 3rem;height:60px;background:rgba(0,0,0,0.88);
+  backdrop-filter:blur(16px);position:sticky;top:0;z-index:500;
+  border-bottom:1px solid var(--line);transition:background .4s var(--ease)}
+nav.scrolled{background:rgba(0,0,0,0.97)}
+.nav-logo{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:8px}
+.nav-logo em{font-style:normal;color:var(--gold)}
+.nav-links{display:flex}
+.nav-links a{font-size:11px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;
+  padding:0 20px;height:60px;display:flex;align-items:center;
+  border-bottom:2px solid transparent;transition:color .25s;text-decoration:none;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-1px;left:20px;right:20px;
+  height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.nav-links a:hover{color:#fff}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-cta{background:var(--gold);color:#000;padding:9px 22px;font-size:10px;
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;
+  border:none;overflow:hidden;position:relative;
+  transition:transform .2s var(--ease),box-shadow .3s}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(200,168,75,.4)}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.on{opacity:1;transform:translateY(0)}
+.reveal-l{opacity:0;transform:translateX(-50px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal-l.on{opacity:1;transform:translateX(0)}
+.reveal-r{opacity:0;transform:translateX(50px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal-r.on{opacity:1;transform:translateX(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* HERO */
+.hero{position:relative;height:100vh;overflow:hidden;background:#000}
+.hero-bg{position:absolute;inset:0;will-change:transform}
+.hero-bg img{width:100%;height:115%;object-fit:cover;filter:brightness(.6) saturate(.9)}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(0,0,0,.1) 40%,rgba(0,0,0,.75) 80%,rgba(0,0,0,.95) 100%)}
+.hero-ov2{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 70%,rgba(200,168,75,.07) 0%,transparent 60%)}
+.hero-content{position:absolute;bottom:0;left:0;right:0;padding:5rem 5rem 4rem;display:flex;flex-direction:column}
+.hero-eye{display:flex;gap:10px;margin-bottom:1.2rem;opacity:0;transform:translateY(20px);animation:fadeUp .9s var(--ease) .3s forwards}
+.badge{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  padding:5px 12px;border:1px solid rgba(255,255,255,.35);color:rgba(255,255,255,.75);backdrop-filter:blur(4px)}
+.badge.gold{border-color:var(--gold);color:var(--gold);box-shadow:0 0 12px rgba(200,168,75,.2)}
+.hero h1{font-size:clamp(2.5rem,6vw,5rem);font-weight:300;letter-spacing:2px;line-height:1.05;
+  opacity:0;transform:translateY(30px);animation:fadeUp 1s var(--ease) .5s forwards}
+.hero h1 strong{font-weight:700;display:block}
+.hero-sub{margin-top:1.2rem;font-size:14px;color:var(--text-dim);letter-spacing:1px;max-width:400px;
+  opacity:0;transform:translateY(20px);animation:fadeUp .9s var(--ease) .7s forwards}
+.hero-actions{margin-top:2rem;display:flex;gap:14px;
+  opacity:0;transform:translateY(20px);animation:fadeUp .9s var(--ease) .9s forwards}
+.btn-hero{background:var(--gold);color:#000;padding:13px 32px;font-size:10px;
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;
+  transition:transform .25s var(--ease),box-shadow .3s;position:relative;overflow:hidden}
+.btn-hero:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(200,168,75,.45)}
+.btn-hero-g{background:transparent;color:#fff;padding:13px 32px;font-size:10px;
+  font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,.3);cursor:pointer;backdrop-filter:blur(4px);
+  transition:border-color .3s,background .3s}
+.btn-hero-g:hover{border-color:rgba(255,255,255,.8);background:rgba(255,255,255,.06)}
+.hero-scroll{position:absolute;bottom:2rem;right:5rem;display:flex;flex-direction:column;
+  align-items:center;gap:8px;opacity:0;animation:fadeIn 1s ease 1.5s forwards}
+.hero-scroll span{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);writing-mode:vertical-rl}
+.scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,var(--gold),transparent);animation:pulse 2s ease-in-out infinite}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* MODEL REVEAL */
+.model-reveal{background:var(--bg3);padding:4rem 5rem;text-align:center;position:relative;overflow:hidden}
+.model-reveal::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:600px;height:200px;background:radial-gradient(ellipse,rgba(200,168,75,.12) 0%,transparent 70%);pointer-events:none}
+.model-reveal img{width:80%;max-width:860px;margin:0 auto;
+  filter:drop-shadow(0 30px 80px rgba(200,168,75,.18));
+  transition:transform .6s var(--ease),filter .6s}
+.model-reveal img:hover{transform:scale(1.02) translateY(-6px);filter:drop-shadow(0 40px 100px rgba(200,168,75,.28))}
+.model-lbl{margin-top:1.5rem;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--text-dim)}
+
+/* SECTION HEADER */
+.sec-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);
+  margin-bottom:.75rem;display:flex;align-items:center;gap:12px}
+.sec-label::before{content:'';display:block;width:20px;height:1px;background:var(--gold)}
+.sec-title{font-size:clamp(1.8rem,3vw,3rem);font-weight:300;letter-spacing:1px;margin-bottom:1rem}
+.sec-sub{font-size:14px;color:var(--text-mid);line-height:1.7;max-width:560px;margin-bottom:3rem}
+
+/* VARIANTS */
+.variant-section{background:var(--bg4);padding:0 5rem 5rem}
+.vtabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:3rem}
+.vtab{padding:16px 26px;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-dim);cursor:pointer;border:none;background:none;
+  border-bottom:2px solid transparent;transition:color .25s;position:relative}
+.vtab::before{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;
+  background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.vtab.active{color:#fff}
+.vtab.active::before{transform:scaleX(1)}
+.vtab:hover{color:#fff}
+.vpanel{display:none}
+.vpanel.active{display:block;animation:tabIn .45s var(--ease)}
+@keyframes tabIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.vmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem}
+.vmeta-title{font-size:11px;color:var(--text-dim);letter-spacing:3px;text-transform:uppercase}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.05)}
+.vgrid-2{grid-template-columns:repeat(2,1fr)}
+.vcard{background:var(--bg4);padding:2rem;cursor:pointer;position:relative;overflow:hidden;transition:background .3s}
+.vcard::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.vcard:hover{background:#141414}
+.vcard:hover::after{transform:scaleX(1)}
+.vcard.feat{background:#111}
+.vcard.feat::after{transform:scaleX(1);opacity:.6}
+.vcard-imgwrap{overflow:hidden;margin-bottom:1.5rem}
+.vcard-imgwrap img{width:100%;aspect-ratio:16/7;object-fit:cover;
+  transition:transform .7s var(--ease),filter .5s;filter:brightness(.85)}
+.vcard:hover .vcard-imgwrap img{transform:scale(1.04);filter:brightness(1)}
+.vtags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem}
+.vtag{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 9px;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.5);transition:all .2s}
+.vtag.new{border-color:var(--gold);color:var(--gold)}
+.vcard h3{font-size:1rem;font-weight:500;margin-bottom:1rem;letter-spacing:.5px}
+.vstats{display:flex;flex-direction:column;gap:12px;padding-top:1rem;border-top:1px solid var(--line)}
+.vstat{display:flex;justify-content:space-between;align-items:baseline}
+.vstat-v{font-size:1.15rem;font-weight:400}
+.vstat-l{font-size:10px;color:var(--text-dim);text-align:right;max-width:55%;line-height:1.3}
+.vactions{display:flex;gap:8px;margin-top:1.5rem}
+.btn-p{background:var(--gold);color:#000;padding:11px 20px;font-size:10px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;border:none;cursor:pointer;flex:1;
+  transition:transform .2s var(--ease),box-shadow .3s;position:relative;overflow:hidden}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(200,168,75,.4)}
+.btn-s{background:transparent;color:#fff;padding:11px 16px;font-size:10px;
+  letter-spacing:1.5px;text-transform:uppercase;border:1px solid rgba(255,255,255,.2);
+  cursor:pointer;flex:1;transition:border-color .25s,background .25s}
+.btn-s:hover{border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.04)}
+
+/* STATS BAR */
+.stats-bar{background:#0c0c0c;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:flex}
+.stat-item{flex:1;padding:2.5rem 2rem;text-align:center;border-right:1px solid var(--line);
+  position:relative;overflow:hidden;transition:background .3s}
+.stat-item:last-child{border-right:none}
+.stat-item:hover{background:rgba(200,168,75,.04)}
+.stat-item::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:0;height:1px;background:var(--gold);transition:width .4s var(--ease)}
+.stat-item:hover::before{width:80%}
+.stat-pre{font-size:10px;color:var(--text-dim);letter-spacing:1px;margin-bottom:4px}
+.stat-num{font-size:2.5rem;font-weight:200;color:var(--gold);letter-spacing:-1px;line-height:1;transition:text-shadow .3s}
+.stat-item:hover .stat-num{text-shadow:var(--gold-glow)}
+.stat-desc{font-size:10px;color:var(--text-dim);letter-spacing:1px;margin-top:8px;line-height:1.5;text-transform:uppercase}
+
+/* HIGHLIGHTS */
+.highlights{background:var(--bg);padding:6rem 5rem}
+.hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.05)}
+.hl-card{background:var(--bg);overflow:hidden;cursor:pointer;position:relative}
+.hl-imgwrap{position:relative;overflow:hidden}
+.hl-imgwrap img{width:100%;aspect-ratio:16/9;object-fit:cover;
+  transition:transform .7s var(--ease),filter .5s;filter:brightness(.75) saturate(.8)}
+.hl-card:hover .hl-imgwrap img{transform:scale(1.06);filter:brightness(.95) saturate(1)}
+.hl-ov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.6));
+  opacity:0;transition:opacity .4s}
+.hl-card:hover .hl-ov{opacity:1}
+.hl-info{padding:1.8rem}
+.hl-info h3{font-size:1rem;font-weight:500;margin-bottom:.5rem;transition:color .25s}
+.hl-card:hover .hl-info h3{color:var(--gold)}
+.hl-info p{font-size:12px;color:var(--text-dim);line-height:1.7}
+.hl-arrow{display:inline-flex;align-items:center;gap:6px;font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-top:1rem;
+  opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s var(--ease)}
+.hl-card:hover .hl-arrow{opacity:1;transform:translateX(0)}
+
+/* FEATURE SPLIT */
+.fsplit{display:grid;grid-template-columns:1fr 1fr;min-height:65vh}
+.fimg{position:relative;overflow:hidden}
+.fimg img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease),filter .6s;filter:brightness(.85) saturate(.9)}
+.fsplit:hover .fimg img{transform:scale(1.03);filter:brightness(1) saturate(1)}
+.ftxt{background:var(--bg4);padding:5rem 4.5rem;display:flex;flex-direction:column;justify-content:center;position:relative}
+.ftxt::before{content:'';position:absolute;top:0;left:0;bottom:0;width:1px;
+  background:linear-gradient(to bottom,transparent,var(--gold),transparent);opacity:.3}
+.ftxt h2{font-size:clamp(1.6rem,2.5vw,2.4rem);font-weight:300;margin-bottom:1.5rem;line-height:1.2}
+.ftxt p{font-size:14px;color:var(--text-mid);line-height:1.85;margin-bottom:1.5rem}
+.read-more{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--gold);cursor:pointer;border:none;background:none;
+  display:inline-flex;align-items:center;gap:10px;transition:gap .25s var(--ease)}
+.read-more:hover{gap:16px}
+
+/* CONFECTION */
+.confection{background:var(--bg2);padding:6rem 5rem}
+.confection>h2{font-size:clamp(1.6rem,2.5vw,2.5rem);font-weight:300;margin-bottom:3rem}
+.ctabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:3rem}
+.ctab{padding:14px 22px;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-dim);cursor:pointer;border:none;background:none;
+  border-bottom:2px solid transparent;position:relative;transition:color .25s}
+.ctab::before{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;
+  background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.ctab.active{color:#fff}
+.ctab.active::before{transform:scaleX(1)}
+.ctab:hover{color:#fff}
+.cpanel{display:none}
+.cpanel.active{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;
+  background:rgba(255,255,255,.04);animation:tabIn .45s var(--ease)}
+.citem{background:var(--bg2);padding:2rem;display:flex;gap:1.5rem;align-items:flex-start;transition:background .25s}
+.citem:hover{background:#0d0d0d}
+.cimg{width:130px;flex-shrink:0;aspect-ratio:4/3;object-fit:cover;
+  transition:transform .4s var(--ease),filter .3s;filter:brightness(.8)}
+.citem:hover .cimg{transform:scale(1.04);filter:brightness(1)}
+.cbody h4{font-size:14px;font-weight:500;margin-bottom:.75rem}
+.cbody p{font-size:12px;color:var(--text-dim);line-height:1.75}
+.ctoggle{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);
+  border:none;background:none;cursor:pointer;margin-top:12px;display:flex;
+  align-items:center;gap:6px;transition:gap .2s}
+.ctoggle:hover{gap:10px}
+.cexpand{overflow:hidden;max-height:0;transition:max-height .55s var(--ease);
+  background:#050505;border-top:0 solid transparent}
+.cexpand.open{max-height:600px;border-top:1px solid rgba(255,255,255,.05)}
+.cexpand-img{width:100%;aspect-ratio:16/6;object-fit:cover;display:block;filter:brightness(.85)}
+.cexpand-txt{padding:2rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.cexpand-txt p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.8}
+.cexpand-txt strong{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+
+/* PROCESSO */
+.processo{background:var(--bg1);padding:7rem 5rem;position:relative;overflow:hidden}
+.processo::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.3}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:4rem}
+.timeline::before{content:'';position:absolute;top:28px;left:12.5%;right:12.5%;height:1px;
+  background:linear-gradient(90deg,var(--gold),rgba(200,168,75,.2),var(--gold))}
+.tl-step{text-align:center;padding:0 2rem;position:relative}
+.tl-node{width:56px;height:56px;border:1px solid var(--gold);display:flex;align-items:center;
+  justify-content:center;margin:0 auto 1.5rem;position:relative;z-index:1;
+  background:var(--bg1);transition:background .3s,box-shadow .3s}
+.tl-step:hover .tl-node{background:rgba(200,168,75,.1);box-shadow:0 0 20px rgba(200,168,75,.3)}
+.tl-node span{font-size:1rem;font-weight:300;color:var(--gold)}
+.tl-step h4{font-size:13px;font-weight:500;margin-bottom:.5rem;letter-spacing:.5px}
+.tl-step p{font-size:11px;color:var(--text-dim);line-height:1.7}
+.tl-imgs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.04);margin-top:4rem}
+.tl-img{position:relative;overflow:hidden;cursor:pointer}
+.tl-img img{width:100%;aspect-ratio:4/3;object-fit:cover;
+  filter:brightness(.6) saturate(.7);transition:transform .6s var(--ease),filter .5s}
+.tl-img:hover img{transform:scale(1.06);filter:brightness(.9) saturate(1)}
+.tl-lbl{position:absolute;bottom:0;left:0;right:0;padding:1rem;
+  background:linear-gradient(to top,rgba(0,0,0,.8),transparent);font-size:11px;letter-spacing:1px;
+  transform:translateY(4px);opacity:0;transition:opacity .3s,transform .3s}
+.tl-img:hover .tl-lbl{opacity:1;transform:translateY(0)}
+
+/* GALERIA */
+.galeria{background:var(--bg);padding:7rem 5rem}
+.gal-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto;gap:3px;margin-top:3rem}
+.gal-item{position:relative;overflow:hidden;cursor:pointer}
+.gal-item:nth-child(1){grid-column:span 2;grid-row:span 2}
+.gal-item:nth-child(5){grid-column:span 2}
+.gal-item img{width:100%;height:100%;object-fit:cover;min-height:200px;
+  transition:transform .7s var(--ease),filter .5s;filter:brightness(.75) saturate(.8)}
+.gal-item:hover img{transform:scale(1.08);filter:brightness(1) saturate(1.05)}
+.gal-ov{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;
+  justify-content:center;opacity:0;transition:opacity .4s var(--ease)}
+.gal-item:hover .gal-ov{opacity:1}
+.gal-zoom{width:48px;height:48px;border:1px solid rgba(255,255,255,.6);display:flex;
+  align-items:center;justify-content:center;font-size:1.2rem;
+  transform:scale(.7);transition:transform .35s var(--ease)}
+.gal-item:hover .gal-zoom{transform:scale(1)}
+.gal-lbl{position:absolute;bottom:0;left:0;right:0;padding:1.5rem;
+  background:linear-gradient(to top,rgba(0,0,0,.7),transparent);font-size:12px;letter-spacing:1px;
+  transform:translateY(100%);transition:transform .4s var(--ease)}
+.gal-item:hover .gal-lbl{transform:translateY(0)}
+
+/* LIGHTBOX */
+.lb{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.95);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .4s;backdrop-filter:blur(8px)}
+.lb.open{opacity:1;pointer-events:all}
+.lb img{max-width:90vw;max-height:85vh;object-fit:contain;
+  transform:scale(.93);transition:transform .5s var(--ease);box-shadow:0 0 80px rgba(0,0,0,.8)}
+.lb.open img{transform:scale(1)}
+.lb-close{position:absolute;top:2rem;right:2.5rem;font-size:1.5rem;
+  color:rgba(255,255,255,.6);cursor:pointer;background:none;border:none;
+  transition:color .2s,transform .2s}
+.lb-close:hover{color:#fff;transform:rotate(90deg)}
+.lb-cap{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim)}
+
+/* CUSTOMIZACAO */
+.custom{background:var(--bg2);padding:7rem 5rem}
+.custom-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;margin-top:3rem;align-items:start}
+.custom-preview{position:sticky;top:80px}
+.custom-display{background:var(--bg4);border:1px solid var(--line);padding:2rem;text-align:center;position:relative}
+.custom-display::before{content:'';position:absolute;inset:-1px;
+  background:linear-gradient(135deg,rgba(200,168,75,.12),transparent,rgba(200,168,75,.08));z-index:-1}
+.custom-img{width:100%;aspect-ratio:1;object-fit:cover;transition:all .5s var(--ease);filter:brightness(.9)}
+.custom-price-row{margin-top:1.5rem;display:flex;justify-content:space-between;align-items:baseline}
+.custom-price-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)}
+.custom-price-val{font-size:2rem;font-weight:300;color:var(--gold)}
+.custom-sum{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.custom-sum-line{display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim)}
+.custom-sum-line span:last-child{color:#fff}
+.custom-controls{display:flex;flex-direction:column;gap:2.5rem}
+.cg-lbl{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);
+  margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.cg-lbl::after{content:'';flex:1;height:1px;background:var(--line)}
+.copts{display:flex;flex-wrap:wrap;gap:8px}
+.copt{padding:8px 16px;border:1px solid rgba(255,255,255,.12);font-size:11px;
+  letter-spacing:1px;text-transform:uppercase;cursor:pointer;background:transparent;
+  color:var(--text-dim);transition:all .25s var(--ease)}
+.copt:hover{border-color:rgba(200,168,75,.5);color:#fff}
+.copt.sel{border-color:var(--gold);color:var(--gold);background:rgba(200,168,75,.08)}
+.color-row{display:flex;gap:10px;flex-wrap:wrap}
+.cswatch{width:36px;height:36px;cursor:pointer;border:2px solid transparent;
+  transition:transform .2s,border-color .2s,box-shadow .3s}
+.cswatch:hover{transform:scale(1.12)}
+.cswatch.sel{border-color:#fff;box-shadow:0 0 12px rgba(255,255,255,.3)}
+.layer-ctrl{display:flex;align-items:center;gap:12px}
+.layer-btn{width:36px;height:36px;border:1px solid var(--line);background:transparent;
+  color:#fff;font-size:1.2rem;cursor:pointer;transition:border-color .2s}
+.layer-btn:hover{border-color:var(--gold)}
+.layer-val{font-size:2rem;font-weight:200;color:var(--gold);min-width:40px;text-align:center}
+.custom-cta{margin-top:1rem;width:100%;padding:14px;background:var(--gold);color:#000;
+  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .3s}
+.custom-cta:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(200,168,75,.4)}
+
+/* DEPOIMENTOS */
+.dep{background:var(--bg1);padding:7rem 5rem;position:relative;overflow:hidden}
+.dep::after{content:'';position:absolute;bottom:0;right:0;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(200,168,75,.05) 0%,transparent 70%);pointer-events:none}
+.dep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);margin-top:3rem}
+.dep-card{background:var(--bg1);padding:2.5rem;position:relative;overflow:hidden;transition:background .3s}
+.dep-card:hover{background:#0d0d0d}
+.dep-card::before{content:'"';position:absolute;top:1.5rem;right:2rem;font-size:5rem;
+  font-weight:700;color:rgba(200,168,75,.07);line-height:1;transition:color .3s}
+.dep-card:hover::before{color:rgba(200,168,75,.15)}
+.dep-stars{display:flex;gap:4px;margin-bottom:1.2rem}
+.dep-star{font-size:12px;color:var(--gold)}
+.dep-txt{font-size:13px;color:rgba(255,255,255,.6);line-height:1.85;margin-bottom:1.8rem;font-style:italic}
+.dep-author{display:flex;align-items:center;gap:12px}
+.dep-av{width:40px;height:40px;overflow:hidden;flex-shrink:0;border:1px solid var(--line)}
+.dep-av img{width:100%;height:100%;object-fit:cover}
+.dep-name{font-size:13px;font-weight:500}
+.dep-role{font-size:10px;color:var(--text-dim);letter-spacing:1px;margin-top:2px}
+.dep-badge{display:inline-block;margin-top:.5rem;font-size:9px;letter-spacing:1.5px;
+  text-transform:uppercase;padding:2px 8px;border:1px solid var(--gold);color:var(--gold)}
+
+/* CTA */
+.cta{position:relative;min-height:70vh;display:flex;align-items:center;overflow:hidden}
+.cta-bg{position:absolute;inset:0}
+.cta-bg img{width:100%;height:100%;object-fit:cover;filter:brightness(.3) saturate(.6)}
+.cta-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 100%)}
+.cta-gld{position:absolute;inset:0;background:radial-gradient(ellipse at 0% 50%,rgba(200,168,75,.15) 0%,transparent 50%)}
+.cta-content{position:relative;z-index:2;padding:5rem;max-width:700px}
+.cta-content h2{font-size:clamp(2rem,5vw,4.5rem);font-weight:300;line-height:1.1;margin-bottom:1.5rem;letter-spacing:1px}
+.cta-content h2 em{font-style:normal;color:var(--gold)}
+.cta-content p{font-size:15px;color:var(--text-mid);line-height:1.8;margin-bottom:2.5rem;max-width:500px}
+.cta-actions{display:flex;gap:14px;flex-wrap:wrap}
+.btn-cta{background:var(--gold);color:#000;padding:15px 40px;font-size:11px;
+  font-weight:700;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;
+  transition:transform .25s var(--ease),box-shadow .3s;position:relative;overflow:hidden}
+.btn-cta:hover{transform:translateY(-2px);box-shadow:0 8px 35px rgba(200,168,75,.5)}
+.btn-cta-g{background:transparent;color:#fff;padding:15px 40px;font-size:11px;
+  font-weight:500;letter-spacing:2.5px;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,.4);cursor:pointer;transition:border-color .3s,background .3s}
+.btn-cta-g:hover{border-color:#fff;background:rgba(255,255,255,.07)}
+.cta-trust{margin-top:2.5rem;display:flex;gap:2rem;flex-wrap:wrap}
+.cta-trust-item{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-dim)}
+.cta-trust-item::before{content:'✦';color:var(--gold);font-size:10px}
+
+/* FOOTNOTE & FEEDBACK */
+.footnote{font-size:10px;color:rgba(255,255,255,.2);padding:2rem 5rem 3rem;line-height:1.9;background:var(--bg2)}
+.feedback{background:#030303;padding:3.5rem 5rem;border-top:1px solid var(--line)}
+.feedback h3{font-size:1rem;font-weight:400;margin-bottom:1rem}
+.feedback p{font-size:12px;color:var(--text-dim);margin-bottom:1rem}
+.rating-row{display:flex;gap:6px;align-items:center}
+.rating-lbl{font-size:10px;color:rgba(255,255,255,.25)}
+.rbt{width:38px;height:38px;background:transparent;border:1px solid rgba(255,255,255,.12);
+  color:var(--text-dim);cursor:pointer;font-size:12px;transition:all .2s var(--ease)}
+.rbt:hover,.rbt.on{background:var(--gold);border-color:var(--gold);color:#000;font-weight:700;
+  transform:translateY(-2px);box-shadow:0 4px 12px rgba(200,168,75,.4)}
+
+/* FOOTER */
+footer{background:#020202;border-top:1px solid var(--line);padding:4rem 5rem 3rem}
+.ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;
+  padding-bottom:3rem;border-bottom:1px solid var(--line)}
+.ft-brand-logo{font-size:13px;font-weight:700;letter-spacing:5px;text-transform:uppercase;
+  color:rgba(255,255,255,.5);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.ft-brand-logo em{font-style:normal;color:var(--gold)}
+.ft-brand p{font-size:12px;color:rgba(255,255,255,.3);line-height:1.8;max-width:280px}
+.ft-col h5{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
+.ft-col a{display:block;font-size:12px;color:rgba(255,255,255,.35);
+  margin-bottom:.6rem;transition:color .2s,padding-left .2s;text-decoration:none}
+.ft-col a:hover{color:#fff;padding-left:6px}
+.ft-bot{display:flex;justify-content:space-between;align-items:center}
+.ft-legal{font-size:10px;color:rgba(255,255,255,.2)}
+.ft-links{display:flex;gap:1.5rem}
+.ft-links a{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:1px;
+  text-transform:uppercase;text-decoration:none;transition:color .2s}
+.ft-links a:hover{color:rgba(255,255,255,.6)}
+
+/* RIPPLE */
+.rpl{position:relative;overflow:hidden}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.22);
+  transform:scale(0);animation:rplAnim .6s linear;pointer-events:none}
+@keyframes rplAnim{to{transform:scale(4);opacity:0}}
+
+/* ═══ AUTH MODAL ═══ */
+.auth-modal{position:fixed;inset:0;z-index:9500;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.85);backdrop-filter:blur(14px);
+  opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
+.auth-modal.open{opacity:1;pointer-events:all}
+.auth-box{background:var(--bg4);border:1px solid var(--line);
+  width:min(460px,92vw);position:relative;
+  transform:scale(.94) translateY(16px);
+  transition:transform .5s var(--ease);
+  box-shadow:0 40px 100px rgba(0,0,0,.8),0 0 0 1px rgba(200,168,75,.07)}
+.auth-modal.open .auth-box{transform:scale(1) translateY(0)}
+.auth-gold-bar{height:2px;background:linear-gradient(90deg,var(--gold),rgba(200,168,75,.2),transparent)}
+.auth-tabs-row{display:flex;border-bottom:1px solid var(--line)}
+.auth-tab{flex:1;padding:1.1rem;font-size:10px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--text-dim);background:none;border:none;
+  cursor:pointer;transition:color .25s;position:relative}
+.auth-tab::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:var(--gold);transform:scaleX(0);transform-origin:left;
+  transition:transform .35s var(--ease)}
+.auth-tab.active{color:#fff}
+.auth-tab.active::after{transform:scaleX(1)}
+.auth-panel{display:none;padding:2rem 2.5rem 2.5rem;animation:tabIn .4s var(--ease)}
+.auth-panel.active{display:block}
+.auth-panel h3{font-size:1.2rem;font-weight:300;margin-bottom:.4rem}
+.auth-panel p{font-size:12px;color:var(--text-dim);margin-bottom:1.8rem;line-height:1.6}
+.auth-field{display:flex;flex-direction:column;gap:6px;margin-bottom:1.1rem}
+.auth-field label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-dim)}
+.auth-input{width:100%;background:#0a0a0a;border:1px solid rgba(255,255,255,.1);
+  color:#fff;padding:12px 14px;font-size:13px;font-family:inherit;outline:none;
+  transition:border-color .25s,box-shadow .25s}
+.auth-input:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(200,168,75,.1)}
+.auth-input.error{border-color:#e74c3c;box-shadow:0 0 0 2px rgba(231,76,60,.1)}
+.auth-input.success-field{border-color:#27ae60}
+.auth-error{font-size:11px;color:#e74c3c;margin-top:4px;display:none;letter-spacing:.3px}
+.auth-error.show{display:block;animation:tabIn .3s var(--ease)}
+.auth-submit{width:100%;padding:13px;background:var(--gold);color:#000;font-size:11px;
+  font-weight:700;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;
+  margin-top:.5rem;transition:transform .2s var(--ease),box-shadow .3s,opacity .2s;
+  position:relative;overflow:hidden}
+.auth-submit:hover{transform:translateY(-1px);box-shadow:0 5px 22px rgba(200,168,75,.45)}
+.auth-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:1.4rem 0;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.2)}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--line)}
+.auth-switch{font-size:11px;color:var(--text-dim);text-align:center;margin-top:1.2rem}
+.auth-switch button{background:none;border:none;color:var(--gold);
+  cursor:pointer;font-size:11px;letter-spacing:.5px;text-decoration:underline;
+  text-underline-offset:3px}
+.auth-close{position:absolute;top:1rem;right:1.2rem;background:none;border:none;
+  color:var(--text-dim);font-size:1.1rem;cursor:pointer;
+  transition:color .2s,transform .3s var(--ease);z-index:1}
+.auth-close:hover{color:#fff;transform:rotate(90deg)}
+.auth-success-msg{background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.3);
+  padding:1rem;margin-top:1rem;font-size:12px;color:#27ae60;
+  line-height:1.6;display:none;animation:tabIn .4s var(--ease)}
+.auth-success-msg.show{display:block}
+.pw-strength{height:2px;background:var(--line);margin-top:6px;border-radius:0}
+.pw-strength-bar{height:100%;width:0;transition:width .4s,background .4s}
+.pw-hint{font-size:10px;color:var(--text-dim);margin-top:4px;letter-spacing:.3px}
+/* ── USER CHIP & DROPDOWN ── */
+.user-chip{
+  display:none;align-items:center;gap:8px;
+  background:rgba(200,168,75,.08);border:1px solid rgba(200,168,75,.25);
+  padding:6px 14px;cursor:pointer;transition:background .2s;
+  position:relative; /* anchor for dropdown */
+}
+.user-chip:hover{background:rgba(200,168,75,.14)}
+.user-chip-av{
+  width:26px;height:26px;border-radius:0;background:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#000;flex-shrink:0;
+}
+.user-chip-name{font-size:10px;letter-spacing:1px;color:rgba(255,255,255,.8);white-space:nowrap}
+/* Invisible bridge so cursor can travel from chip to dropdown */
+.user-chip::after{
+  content:'';position:absolute;
+  top:100%;left:0;right:0;height:12px;
+}
+.user-dropdown{
+  position:absolute;
+  top:calc(100% + 10px);right:0;
+  background:#0d0d0d;
+  border:1px solid rgba(200,168,75,.25);
+  min-width:180px;z-index:600;
+  opacity:0;pointer-events:none;
+  transform:translateY(-8px);
+  transition:opacity .25s var(--ease),transform .25s var(--ease);
+  box-shadow:0 16px 40px rgba(0,0,0,.6),0 0 0 1px rgba(200,168,75,.06);
+}
+/* Keep open when hovering chip OR dropdown */
+.user-chip:hover .user-dropdown,
+.user-chip:focus-within .user-dropdown,
+.user-chip.open .user-dropdown{
+  opacity:1;pointer-events:all;transform:translateY(0);
+}
+.user-dropdown-header{
+  padding:12px 16px 10px;
+  border-bottom:1px solid var(--line);
+}
+.user-dropdown-email{font-size:10px;color:var(--text-dim);letter-spacing:.5px;margin-top:2px;word-break:break-all}
+.user-dropdown-name{font-size:12px;font-weight:500;color:#fff}
+.user-dropdown a{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 16px;font-size:11px;
+  letter-spacing:.5px;color:rgba(255,255,255,.6);
+  cursor:pointer;border-bottom:1px solid var(--line);
+  text-decoration:none;
+  transition:color .2s,background .2s,padding-left .2s;
+}
+.user-dropdown a:last-child{border-bottom:none}
+.user-dropdown a:hover{color:#fff;background:rgba(255,255,255,.04);padding-left:20px}
+.user-dropdown a.danger{color:rgba(231,76,60,.8)}
+.user-dropdown a.danger:hover{color:#e74c3c;background:rgba(231,76,60,.06)}
+.user-dropdown-icon{width:16px;text-align:center;font-size:12px;flex-shrink:0}
+.auth-nav-btns{display:flex;gap:8px;align-items:center}
+.btn-auth-ghost{background:transparent;color:rgba(255,255,255,.7);
+  padding:7px 14px;font-size:10px;font-weight:600;letter-spacing:1.5px;
+  text-transform:uppercase;border:1px solid rgba(255,255,255,.15);cursor:pointer;
+  transition:border-color .25s,color .25s,background .25s}
+.btn-auth-ghost:hover{border-color:rgba(255,255,255,.5);color:#fff}
+.btn-auth-solid{background:var(--gold);color:#000;
+  padding:7px 14px;font-size:10px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;border:none;cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .3s}
+.btn-auth-solid:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(200,168,75,.4)}
+
+/* ═══ PROFILE & ORDERS SIDE MODALS ═══ */
+.side-modal{position:fixed;top:0;right:0;bottom:0;z-index:8500;
+  width:min(420px,100vw);background:#0d0d0d;border-left:1px solid var(--line);
+  transform:translateX(100%);transition:transform .45s var(--ease);
+  display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.6)}
+.side-modal.open{transform:translateX(0)}
+.side-modal-ov{position:fixed;inset:0;z-index:8400;background:rgba(0,0,0,.6);
+  backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .35s}
+.side-modal-ov.open{opacity:1;pointer-events:all}
+.side-modal-head{padding:1.8rem 2rem 1.5rem;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;position:relative}
+.side-modal-head::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),rgba(200,168,75,.2),transparent)}
+.side-modal-title{font-size:1rem;font-weight:400;letter-spacing:.5px}
+.side-modal-close{background:none;border:none;color:var(--text-dim);
+  font-size:1.1rem;cursor:pointer;transition:color .2s,transform .3s var(--ease)}
+.side-modal-close:hover{color:#fff;transform:rotate(90deg)}
+.side-modal-body{padding:2rem;overflow-y:auto;flex:1}
+/* Profile */
+.pav-section{display:flex;flex-direction:column;align-items:center;gap:.75rem;
+  margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid var(--line)}
+.pav-big{width:64px;height:64px;background:var(--gold);display:flex;
+  align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;color:#000}
+.pav-name{font-size:1.1rem;font-weight:300}
+.pav-email{font-size:11px;color:var(--text-dim);letter-spacing:.5px}
+.p-field{margin-bottom:1.2rem}
+.p-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:6px;display:block}
+.p-input{width:100%;background:#0a0a0a;border:1px solid rgba(255,255,255,.1);
+  color:#fff;padding:11px 14px;font-size:13px;font-family:inherit;outline:none;
+  transition:border-color .25s}
+.p-input:focus{border-color:var(--gold)}
+.p-save{width:100%;padding:12px;background:var(--gold);color:#000;
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  border:none;cursor:pointer;margin-top:.5rem;
+  transition:transform .2s var(--ease),box-shadow .3s}
+.p-save:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(200,168,75,.4)}
+/* Orders */
+.orders-empty{text-align:center;padding:3rem 1rem;
+  color:var(--text-dim);font-size:13px;line-height:1.8}
+.order-card{background:#0a0a0a;border:1px solid var(--line);
+  padding:1.2rem;margin-bottom:10px;transition:border-color .2s}
+.order-card:hover{border-color:rgba(200,168,75,.3)}
+.order-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+.order-card-id{font-size:10px;letter-spacing:2px;color:var(--gold)}
+.order-card-date{font-size:10px;color:var(--text-dim)}
+.order-card-model{font-size:13px;font-weight:500;margin-bottom:.4rem}
+.order-card-detail{font-size:11px;color:var(--text-dim);line-height:1.5}
+.order-card-total{font-size:1rem;font-weight:300;color:var(--gold);margin-top:.75rem}
+/* OTP step */
+.otp-step{display:none;animation:tabIn .4s var(--ease)}
+.otp-step.active{display:block}
+.otp-row{display:flex;gap:8px;justify-content:center;margin:1.2rem 0}
+.otp-digit{width:44px;height:52px;background:#0a0a0a;
+  border:1px solid rgba(255,255,255,.12);color:#fff;
+  font-size:1.3rem;font-weight:600;text-align:center;
+  outline:none;font-family:monospace;caret-color:var(--gold);
+  transition:border-color .2s,box-shadow .2s}
+.otp-digit:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(200,168,75,.15)}
+.otp-resend{background:none;border:none;color:var(--gold);font-size:11px;
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.otp-resend:disabled{color:var(--text-dim);cursor:not-allowed;text-decoration:none}
+.otp-timer{font-size:11px;color:var(--text-dim);letter-spacing:.5px}
+/* BACKEND_URL banner */
+.api-notice{background:rgba(200,168,75,.06);border:1px solid rgba(200,168,75,.2);
+  padding:.75rem 1rem;font-size:11px;color:rgba(200,168,75,.8);
+  margin-bottom:1rem;line-height:1.6;display:none}
+.api-notice.show{display:block}
+
+/* ═══ HAMBURGER MENU ═══ */
+.hamburger{display:none;flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:4px;z-index:10}
+.hamburger span{display:block;width:22px;height:1.5px;background:#fff;
+  transition:transform .35s var(--ease),opacity .25s,width .3s}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;width:0}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.mobile-menu{position:fixed;top:60px;left:0;right:0;bottom:0;z-index:490;
+  background:rgba(0,0,0,.97);backdrop-filter:blur(16px);
+  display:flex;flex-direction:column;padding:2.5rem 2rem;
+  transform:translateX(100%);transition:transform .45s var(--ease)}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu a{font-size:1.2rem;font-weight:300;color:rgba(255,255,255,.7);
+  letter-spacing:2px;text-transform:uppercase;padding:1rem 0;
+  border-bottom:1px solid rgba(255,255,255,.06);text-decoration:none;
+  transition:color .2s,padding-left .2s}
+.mobile-menu a:hover{color:var(--gold);padding-left:.5rem}
+.mobile-menu-actions{margin-top:2rem;display:flex;flex-direction:column;gap:10px}
+
+/* ═══ RESPONSIVE — TABLET 1024px ═══ */
+@media(max-width:1024px){
+  .timeline,.tl-imgs{grid-template-columns:repeat(2,1fr)}
+  .timeline::before{display:none}
+  .gal-grid{grid-template-columns:repeat(2,1fr)}
+  .gal-item:nth-child(1){grid-column:span 1;grid-row:span 1}
+  .gal-item:nth-child(5){grid-column:span 1}
+  .ft-top{grid-template-columns:1fr 1fr}
+  .custom-layout{grid-template-columns:1fr}
+  .custom-preview{position:static}
+  .contact-grid{grid-template-columns:1fr 1fr}
+  .nav-links a{padding:0 12px;font-size:10px}
+  .fsplit{min-height:auto}
+}
+
+/* ═══ RESPONSIVE — MOBILE 768px ═══ */
+@media(max-width:768px){
+  /* NAV */
+  nav{padding:0 1.2rem;height:56px}
+  .nav-links{display:none}
+  .nav-welcome{display:none!important}
+  .hamburger{display:flex}
+  .auth-nav-btns .btn-auth-ghost{display:none}
+  .auth-nav-btns .btn-auth-solid{padding:6px 12px;font-size:9px}
+  .nav-cta{padding:7px 14px;font-size:9px}
+
+  /* HERO */
+  .hero{height:100svh}
+  .hero-content{padding:2rem 1.5rem 2rem}
+  .hero h1{font-size:clamp(1.8rem,8vw,2.8rem);letter-spacing:1px}
+  .hero-sub{font-size:13px;max-width:100%}
+  .hero-actions{flex-direction:column;gap:10px;align-items:flex-start}
+  .btn-hero,.btn-hero-g{width:100%;text-align:center;justify-content:center}
+  .hero-scroll{display:none}
+  .hero-eye{flex-wrap:wrap;gap:6px}
+
+  /* SECTIONS padding */
+  .model-reveal{padding:2.5rem 1.5rem}
+  .variant-section{padding:0 1.5rem 3rem}
+  .highlights{padding:4rem 1.5rem}
+  .confection{padding:4rem 1.5rem}
+  .processo{padding:4rem 1.5rem}
+  .galeria{padding:4rem 1.5rem}
+  .custom{padding:4rem 1.5rem}
+  .dep{padding:4rem 1.5rem}
+  .cta{min-height:auto}
+  .cta-content{padding:4rem 1.5rem}
+  .contato{padding:4rem 1.5rem}
+  .footnote{padding:2rem 1.5rem}
+  .feedback{padding:2.5rem 1.5rem}
+  footer{padding:3rem 1.5rem 2rem}
+
+  /* GRIDS → single col */
+  .vgrid,.hl-grid,.dep-grid{grid-template-columns:1fr}
+  .vgrid-2{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .timeline{grid-template-columns:1fr}
+  .tl-imgs{grid-template-columns:1fr 1fr}
+  .gal-grid{grid-template-columns:1fr 1fr;gap:2px}
+  .dep-grid{gap:1px}
+
+  /* FEATURE SPLIT stacked */
+  .fsplit{grid-template-columns:1fr;min-height:auto}
+  .fimg{height:240px}
+  .ftxt{padding:2.5rem 1.5rem}
+
+  /* CONFECTION */
+  .cpanel.active{grid-template-columns:1fr}
+  .cexpand-txt{grid-template-columns:1fr;padding:1.2rem}
+  .citem{flex-direction:column;gap:1rem}
+  .cimg{width:100%;height:180px;aspect-ratio:unset}
+
+  /* STATS */
+  .stats-bar{flex-direction:column}
+  .stat-item{border-right:none;border-bottom:1px solid var(--line);padding:1.5rem}
+
+  /* FOOTER */
+  .ft-top{grid-template-columns:1fr;gap:2rem}
+  .ft-bot{flex-direction:column;gap:1rem;text-align:center}
+
+  /* CUSTOM */
+  .custom-layout{grid-template-columns:1fr;gap:2rem}
+  .custom-preview{position:static}
+  .copts{gap:6px}
+  .copt{padding:7px 12px;font-size:10px}
+  .color-row{gap:8px}
+  .cswatch{width:30px;height:30px}
+  .layer-ctrl{gap:8px}
+
+  /* PRICE FLOAT */
+  .price-float{flex-direction:column;gap:1rem;align-items:flex-start;padding:1.2rem 1.5rem;bottom:0;left:0;right:0;border-radius:0;border-left:none;border-right:none;border-bottom:none}
+  .price-float-btn{width:100%;text-align:center}
+
+  /* MODAL */
+  .modal-box{width:94vw}
+  .modal-body,.modal-top,.modal-footer{padding-left:1.5rem;padding-right:1.5rem}
+
+  /* AUTH MODAL */
+  .auth-box{width:94vw}
+  .auth-panel{padding:1.5rem 1.5rem 2rem}
+
+  /* VARIANT TABS scroll */
+  .vtabs{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:1px}
+  .vtabs::-webkit-scrollbar{display:none}
+  .vtab{white-space:nowrap;padding:12px 16px}
+
+  /* CONFECTION TABS */
+  .ctabs{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .ctabs::-webkit-scrollbar{display:none}
+  .ctab{white-space:nowrap;padding:12px 14px}
+
+  /* TIMELINE */
+  .tl-step{padding:0 .5rem}
+  .tl-node{width:44px;height:44px}
+
+  /* CTA */
+  .cta-content h2{font-size:2rem}
+  .cta-actions{flex-direction:column;gap:10px}
+  .btn-cta,.btn-cta-g{width:100%;text-align:center}
+
+  /* DEPOIMENTOS */
+  .dep-card{padding:1.8rem}
+
+  /* CONTACT */
+  .contact-info-strip{gap:1.5rem}
+
+  /* ONBOARDING */
+  .ob-wrap{padding:1.5rem}
+  .ob-deco{width:300px;height:300px}
+  .ob-deco2{width:420px;height:420px}
+  .ob-title{font-size:1.6rem}
+
+  /* BACK TO TOP */
+  #btt{bottom:5.5rem;right:1rem;width:38px;height:38px}
+
+  /* TOAST */
+  .toast{width:90vw;text-align:center;justify-content:center}
+}
+
+/* ═══ RESPONSIVE — SMALL PHONE 480px ═══ */
+@media(max-width:480px){
+  .hero h1{font-size:clamp(1.5rem,7vw,2rem)}
+  .hero-eye .badge{font-size:8px;padding:4px 8px}
+  .sec-title{font-size:1.6rem}
+  .gal-grid{grid-template-columns:1fr}
+  .gal-item:nth-child(1){grid-column:span 1;grid-row:span 1}
+  .gal-item:nth-child(5){grid-column:span 1}
+  .tl-imgs{grid-template-columns:1fr}
+  .vcard h3{font-size:.95rem}
+  .vstats{gap:8px}
+  .vstat-v{font-size:1rem}
+  .contact-grid{grid-template-columns:1fr}
+  .stat-num{font-size:2rem}
+  .auth-panel{padding:1.2rem 1.2rem 1.8rem}
+  .ft-top{gap:1.5rem}
+  .rating-row{flex-wrap:wrap}
+  .model-reveal img{width:100%}
+  .price-float-val{font-size:1.3rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ONBOARDING -->
+<div id="onboard">
+  <div class="ob-deco"></div>
+  <div class="ob-deco ob-deco2"></div>
+  <div class="ob-wrap">
+    <div class="ob-logo">🎂 Boulangerie <em>Turbo</em></div>
+    <h1 class="ob-title">Bem-vindo à<strong>Confeitaria Turbo</strong></h1>
+    <p class="ob-sub">Experiências gastronômicas de alto desempenho.<br>Antes de começar — como podemos te chamar?</p>
+    <div class="ob-input-wrap">
+      <input class="ob-input" id="ob-name" type="text" placeholder="Seu nome" maxlength="30" autocomplete="off">
+      <div class="ob-input-line"></div>
+    </div>
+    <button class="ob-btn shine" id="ob-enter" onclick="obEnter()" disabled>Entrar</button>
+    <button class="ob-skip" onclick="obSkip()">Entrar sem nome</button>
+  </div>
+</div>
+
+<!-- BACK TO TOP -->
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">↑</button>
+
+<!-- SCROLL BAR -->
+<div id="sp"></div>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="lbClose(event)">
+  <button class="lb-close" onclick="lbClose()">&times;</button>
+  <img id="lb-img" src="" alt="">
+  <div class="lb-cap" id="lb-cap"></div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="auth-modal" id="auth-modal" onclick="authBgClose(event)">
+  <div class="auth-box">
+    <div class="auth-gold-bar"></div>
+    <button class="auth-close" onclick="closeAuth()">&times;</button>
+    <div class="auth-tabs-row">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Entrar</button>
+      <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Criar Conta</button>
+    </div>
+
+    <!-- LOGIN PANEL — OTP flow -->
+    <div class="auth-panel active" id="panel-login">
+      <!-- Step 1: Enter email -->
+      <div class="otp-step active" id="otp-step-email">
+        <h3>Entrar na conta.</h3>
+        <p>Insira seu e-mail e enviaremos um código de acesso de 6 dígitos.</p>
+        <div class="api-notice" id="api-notice-login">
+          ⚠ Back-end não detectado. Usando autenticação local (localStorage).
+        </div>
+        <div class="auth-field">
+          <label>E-mail</label>
+          <input class="auth-input" id="login-email" type="email"
+            placeholder="seu@email.com" autocomplete="email"
+            onkeydown="if(event.key==='Enter')requestOTPFront()">
+          <span class="auth-error" id="login-email-err"></span>
+        </div>
+        <div class="auth-success-msg" id="otp-sent-msg">
+          ✓ Código enviado! Verifique sua caixa de entrada.
+        </div>
+        <button class="auth-submit shine rpl" id="otp-req-btn" onclick="requestOTPFront()">
+          Enviar código →
+        </button>
+        <div class="auth-switch">Não tem conta?
+          <button onclick="switchAuthTab('signup')">Criar agora</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Enter OTP code -->
+      <div class="otp-step" id="otp-step-code">
+        <h3>Insira o código.</h3>
+        <p id="otp-dest-text">Enviamos 6 dígitos para <strong id="otp-dest-email"></strong></p>
+        <div class="otp-row" id="otp-row">
+          <input class="otp-digit" maxlength="1" type="tel" pattern="[0-9]" inputmode="numeric"
+            onkeyup="otpKeyUp(this,0)">
+          <input class="otp-digit" maxlength="1" type="tel" pattern="[0-9]" inputmode="numeric"
+            onkeyup="otpKeyUp(this,1)">
+          <input class="otp-digit" maxlength="1" type="tel" pattern="[0-9]" inputmode="numeric"
+            onkeyup="otpKeyUp(this,2)">
+          <input class="otp-digit" maxlength="1" type="tel" pattern="[0-9]" inputmode="numeric"
+            onkeyup="otpKeyUp(this,3)">
+          <input class="otp-digit" maxlength="1" type="tel" pattern="[0-9]" inputmode="numeric"
+            onkeyup="otpKeyUp(this,4)">
+          <input class="otp-digit" maxlength="1" type="tel" pattern="[0-9]" inputmode="numeric"
+            onkeyup="otpKeyUp(this,5)">
+        </div>
+        <span class="auth-error" id="otp-code-err"></span>
+        <div class="auth-success-msg" id="login-success">✓ Login realizado! Bem-vindo de volta.</div>
+        <button class="auth-submit shine rpl" id="otp-verify-btn" onclick="verifyOTPFront()" disabled>
+          Verificar código →
+        </button>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1rem">
+          <button class="btn-s" style="font-size:10px;padding:6px 12px;flex:none"
+            onclick="backToEmail()">← Trocar e-mail</button>
+          <span>
+            <span class="otp-timer" id="otp-timer">Reenviar em 60s</span>
+            <button class="otp-resend" id="otp-resend-btn" onclick="requestOTPFront(true)"
+              disabled style="display:none">Reenviar código</button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIGNUP PANEL -->
+    <div class="auth-panel" id="panel-signup">
+      <h3>Crie sua conta.</h3>
+      <p>Cadastre-se para receber atualizações sobre pedidos e ofertas exclusivas.</p>
+      <div class="auth-field">
+        <label>Nome completo</label>
+        <input class="auth-input" id="signup-name" type="text" placeholder="Seu nome"
+          maxlength="50" autocomplete="name">
+        <span class="auth-error" id="signup-name-err"></span>
+      </div>
+      <div class="auth-field">
+        <label>E-mail</label>
+        <input class="auth-input" id="signup-email" type="email"
+          placeholder="seu@email.com" autocomplete="email">
+        <span class="auth-error" id="signup-email-err"></span>
+      </div>
+      <div class="auth-field">
+        <label>Senha</label>
+        <input class="auth-input" id="signup-pass" type="password"
+          placeholder="Mínimo 8 caracteres" autocomplete="new-password"
+          oninput="checkPwStrength(this.value)">
+        <div class="pw-strength"><div class="pw-strength-bar" id="pw-bar"></div></div>
+        <span class="pw-hint" id="pw-hint"></span>
+        <span class="auth-error" id="signup-pass-err"></span>
+      </div>
+      <div class="auth-success-msg" id="signup-success">
+        🎂 Conta criada com sucesso! Você já pode fazer login.
+      </div>
+      <button class="auth-submit shine rpl" id="signup-btn" onclick="doSignup()">Criar conta →</button>
+      <div class="auth-switch">Já tem conta?
+        <button onclick="switchAuthTab('login')">Entrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#modelos" onclick="closeMobileMenu()">Modelos</a>
+  <a href="#processo" onclick="closeMobileMenu()">Processo</a>
+  <a href="#galeria" onclick="closeMobileMenu()">Galeria</a>
+  <a href="#customizacao" onclick="closeMobileMenu()">Configurar</a>
+  <a href="#depoimentos" onclick="closeMobileMenu()">Clientes</a>
+  <a href="#contato" onclick="closeMobileMenu()">Contato</a>
+  <div class="mobile-menu-actions">
+    <button class="btn-auth-ghost" style="width:100%;padding:12px" onclick="closeMobileMenu();openAuth('login')">Entrar</button>
+    <button class="btn-auth-solid" style="width:100%;padding:12px" onclick="closeMobileMenu();openAuth('signup')">Criar Conta</button>
+    <button class="nav-cta shine rpl" style="width:100%;padding:12px;margin-top:4px" onclick="closeMobileMenu();openModal()">Encomendar →</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo" ondblclick="resetName()">🎂 Boulangerie <em>Turbo</em></div>
+  <div class="nav-links">
+    <a href="#modelos">Modelos</a>
+    <a href="#processo">Processo</a>
+    <a href="#galeria">Galeria</a>
+    <a href="#customizacao">Configurar</a>
+    <a href="#depoimentos">Clientes</a>
+    <a href="#contato">Contato</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="nav-welcome" id="nav-welcome" style="display:none">Olá, <em id="nav-name-chip"></em></span>
+    <!-- Auth buttons (shown when logged out) -->
+    <div class="auth-nav-btns" id="auth-nav-btns">
+      <button class="btn-auth-ghost" onclick="openAuth('login')">Entrar</button>
+      <button class="btn-auth-solid" onclick="openAuth('signup')">Criar Conta</button>
+    </div>
+    <!-- User chip (shown when logged in) -->
+    <div class="user-chip" id="user-chip" tabindex="0"
+         onmouseenter="this.classList.add('open')"
+         onmouseleave="this.classList.remove('open')"
+         onfocus="this.classList.add('open')"
+         onblur="this.classList.remove('open')">
+      <div class="user-chip-av" id="user-av">?</div>
+      <span class="user-chip-name" id="user-chip-name"></span>
+      <div class="user-dropdown" id="user-dropdown"
+           onmouseenter="document.getElementById('user-chip').classList.add('open')"
+           onmouseleave="document.getElementById('user-chip').classList.remove('open')">
+        <div class="user-dropdown-header">
+          <div class="user-dropdown-name" id="dropdown-name">—</div>
+          <div class="user-dropdown-email" id="dropdown-email">—</div>
+        </div>
+        <a onclick="openProfileModal()">
+          <span class="user-dropdown-icon">👤</span>Meu perfil
+        </a>
+        <a onclick="openOrdersModal()">
+          <span class="user-dropdown-icon">📦</span>Meus pedidos
+        </a>
+        <a class="danger" onclick="doLogout()">
+          <span class="user-dropdown-icon">→</span>Sair da conta
+        </a>
+      </div>
+    </div>
+    <button class="nav-cta rpl shine" onclick="openModal()">Encomendar</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-bg" id="hbg">
+    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=2000&auto=format&fit=crop" alt="Bolo Turbo Coupé Confeitado">
+  </div>
+  <div class="hero-ov"></div><div class="hero-ov2"></div>
+  <div class="hero-content">
+    <div class="hero-eye">
+      <span class="badge gold">Novo 2026</span>
+      <span class="badge">Artesanal</span>
+      <span class="badge">Forno a Lenha</span>
+    </div>
+    <h1><strong>Bolo Turbo</strong>Coupé Confeitado</h1>
+    <p class="hero-sub" id="hero-sub">A nova geração da confeitaria de alto desempenho. Sabor, elegância e precisão em cada camada.</p>
+    <div class="hero-actions">
+      <button class="btn-hero rpl shine" onclick="openModal()">Encomendar agora</button>
+      <button class="btn-hero-g" onclick="document.getElementById('modelos').scrollIntoView({behavior:'smooth'})">Explorar modelos</button>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
+</div>
+
+<!-- MODEL REVEAL -->
+<div class="model-reveal reveal">
+  <p class="sec-label" style="justify-content:center;margin-bottom:1.5rem">Vista do modelo</p>
+  <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=1400&auto=format&fit=crop&q=80" alt="Vista lateral do Bolo">
+  <p class="model-lbl">Bolo Turbo Coupé Confeitado — Edição 2026</p>
+</div>
+
+<!-- VARIANTS -->
+<section class="variant-section" id="modelos">
+  <div class="vtabs">
+    <button class="vtab active" data-p="especial">Especial Confeitado</button>
+    <button class="vtab" data-p="classico">Clássico</button>
+    <button class="vtab" data-p="mousse">Mousse</button>
+    <button class="vtab" data-p="tradicional">Tradicional</button>
+  </div>
+  <div id="models-greeting" style="padding:2rem 0 0;font-size:12px;color:var(--text-dim);letter-spacing:1px;display:none">
+    Escolha o seu bolo, <span class="name-hl" id="models-name"></span>
+  </div>
+
+  <div class="vpanel active" id="p-especial">
+    <div class="vmeta"><p class="vmeta-title">3 modelos disponíveis</p><p style="font-size:11px;color:var(--text-dim);letter-spacing:1px">Linha Especial · 2026</p></div>
+    <div class="vgrid">
+      <div class="vcard tilt reveal d1">
+        <div class="vcard-imgwrap"><img src="https://images.unsplash.com/photo-1586788680434-30d324b2d46f?w=700&auto=format&fit=crop" alt="Coupé"></div>
+        <div class="vtags"><span class="vtag new">Novo</span><span class="vtag">2026</span><span class="vtag">Artesanal</span><span class="vtag">Forno a Lenha</span></div>
+        <h3>Bolo Coupé Confeitado</h3>
+        <div class="vstats">
+          <div class="vstat"><span class="vstat-v">4,8 min</span><span class="vstat-l">Tempo de derretimento na boca</span></div>
+          <div class="vstat"><span class="vstat-v">442 g</span><span class="vstat-l">Camadas de recheio máx. por fatia</span></div>
+        </div>
+        <div class="vactions"><button class="btn-p rpl shine" onclick="openModal('Coupé Confeitado',220)">Confirmar sabor</button><button class="btn-s">Comparar</button></div>
+      </div>
+      <div class="vcard tilt reveal d2">
+        <div class="vcard-imgwrap"><img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=700&auto=format&fit=crop" alt="S Coupé"></div>
+        <div class="vtags"><span class="vtag new">Novo</span><span class="vtag">2026</span><span class="vtag">Artesanal</span><span class="vtag">Forno a Lenha</span></div>
+        <h3>Bolo S Coupé Confeitado</h3>
+        <div class="vstats">
+          <div class="vstat"><span class="vstat-v">3,8 min</span><span class="vstat-l">Tempo de derretimento na boca</span></div>
+          <div class="vstat"><span class="vstat-v">666 g</span><span class="vstat-l">Camadas de recheio máx. por fatia</span></div>
+        </div>
+        <div class="vactions"><button class="btn-p rpl shine" onclick="openModal('S Coupé Confeitado',360)">Confirmar sabor</button><button class="btn-s">Comparar</button></div>
+      </div>
+      <div class="vcard feat tilt reveal d3">
+        <div class="vcard-imgwrap"><img src="https://images.unsplash.com/photo-1559620192-032c4bc4674e?w=700&auto=format&fit=crop" alt="Turbo"></div>
+        <div class="vtags"><span class="vtag new">Novo</span><span class="vtag">2026</span><span class="vtag">Artesanal</span><span class="vtag">Forno a Lenha</span></div>
+        <h3>Bolo Turbo Coupé Confeitado</h3>
+        <div class="vstats">
+          <div class="vstat"><span class="vstat-v">2,5 min</span><span class="vstat-l">Tempo de derretimento na boca</span></div>
+          <div class="vstat"><span class="vstat-v">1.156 g</span><span class="vstat-l">Camadas de recheio máx. por fatia</span></div>
+        </div>
+        <div class="vactions"><button class="btn-p rpl shine" style="flex:1" onclick="openModal('Turbo Coupé Confeitado',480)">Encomendar</button><button class="btn-s">Comparar</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vpanel" id="p-classico">
+    <div class="vmeta"><p class="vmeta-title">2 modelos disponíveis</p><p style="font-size:11px;color:var(--text-dim);letter-spacing:1px">Linha Clássica · 2026</p></div>
+    <div class="vgrid vgrid-2">
+      <div class="vcard">
+        <div class="vcard-imgwrap"><img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=700&auto=format&fit=crop" alt="Branco"></div>
+        <div class="vtags"><span class="vtag">Clássico</span><span class="vtag">2026</span></div>
+        <h3>Bolo Clássico Branco</h3>
+        <div class="vstats">
+          <div class="vstat"><span class="vstat-v">5,2 min</span><span class="vstat-l">Derretimento na boca</span></div>
+          <div class="vstat"><span class="vstat-v">320 g</span><span class="vstat-l">Recheio por fatia</span></div>
+        </div>
+        <div class="vactions"><button class="btn-p rpl">Confirmar sabor</button><button class="btn-s">Comparar</button></div>
+      </div>
+      <div class="vcard">
+        <div class="vcard-imgwrap"><img src="https://images.unsplash.com/photo-1519869325930-281384150729?w=700&auto=format&fit=crop" alt="Cerimônia"></div>
+        <div class="vtags"><span class="vtag">Clássico</span><span class="vtag">Casamento</span></div>
+        <h3>Bolo Clássico Cerimônia</h3>
+        <div class="vstats">
+          <div class="vstat"><span class="vstat-v">4,5 min</span><span class="vstat-l">Derretimento na boca</span></div>
+          <div class="vstat"><span class="vstat-v">480 g</span><span class="vstat-l">Recheio por fatia</span></div>
+        </div>
+        <div class="vactions"><button class="btn-p rpl">Confirmar sabor</button><button class="btn-s">Comparar</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vpanel" id="p-mousse">
+    <div class="vmeta"><p class="vmeta-title">2 modelos disponíveis</p><p style="font-size:11px;color:var(--text-dim);letter-spacing:1px">Linha Mousse · 2026</p></div>
+    <div class="vgrid vgrid-2">
+      <div class="vcard">
+        <div class="vcard-imgwrap"><img src="https://images.unsplash.com/photo-1562440499-64c9a111f713?w=700&auto=format&fit=crop" alt="Chocolate"></div>
+        <div class="vtags"><span class="vtag">Mousse</span><span class="vtag">Chocolate</span></div>
+        <h3>Mousse de Chocolate Belga</h3>
+        <div class="vstats">
+          <div class="vstat"><span class="vstat-v">2,1 min</span><span class="vstat-l">Derretimento na boca</span></div>
+          <div class="vstat"><span class="vstat-v">380 g</span><span class="vstat-l">Recheio por fatia</span></div>
+        </div>
+        <div class="vactions"><button class="btn-p rpl">Confirmar sabor</button><button class="btn-s">Comparar</button></div>
+      </div>
+      <div class="vcard">
+        <div class="vcard-imgwrap"><img src="https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=700&auto=format&fit=crop" alt="Maracujá"></div>
+        <div class="vtags"><span class="vtag">Mousse</span><span class="vtag">Tropical</span></div>
+        <h3>Mousse de Maracujá Premium</h3>
+        <div class="vstats">
+          <div class="vstat"><span class="vstat-v">2,8 min</span><span class="vstat-l">Derretimento na boca</span></div>
+          <div class="vstat"><span class="vstat-v">290 g</span><span class="vstat-l">Recheio por fatia</span></div>
+        </div>
+        <div class="vactions"><button class="btn-p rpl">Confirmar sabor</button><button class="btn-s">Comparar</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vpanel" id="p-tradicional">
+    <div class="vmeta"><p class="vmeta-title">1 modelo disponível</p><p style="font-size:11px;color:var(--text-dim);letter-spacing:1px">Linha Tradicional · 2026</p></div>
+    <div class="vgrid vgrid-2">
+      <div class="vcard">
+        <div class="vcard-imgwrap"><img src="https://images.unsplash.com/photo-1611293388250-580b08c4a145?w=700&auto=format&fit=crop" alt="Tradicional"></div>
+        <div class="vtags"><span class="vtag">Tradicional</span><span class="vtag">Festa</span></div>
+        <h3>Bolo Tradicional de Festa</h3>
+        <div class="vstats">
+          <div class="vstat"><span class="vstat-v">6,0 min</span><span class="vstat-l">Derretimento na boca</span></div>
+          <div class="vstat"><span class="vstat-v">240 g</span><span class="vstat-l">Recheio por fatia</span></div>
+        </div>
+        <div class="vactions"><button class="btn-p rpl">Confirmar sabor</button><button class="btn-s">Comparar</button></div>
+      </div>
+      <div class="vcard" style="display:flex;flex-direction:column;justify-content:center;gap:.75rem">
+        <p class="sec-label">Em breve</p>
+        <h3 style="font-size:1.1rem;font-weight:300">Novos modelos tradicionais chegando em 2026.</h3>
+        <p style="font-size:12px;color:var(--text-dim);line-height:1.7">Nossa equipe está desenvolvendo novas receitas exclusivas para a linha tradicional.</p>
+        <button class="btn-s" style="width:fit-content;margin-top:.5rem">Notificar-me</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item reveal"><div class="stat-num" data-cnt="16">0</div><div style="font-size:1rem;color:var(--text-dim);margin-top:2px">minutos</div><div class="stat-desc">Tempo de forno para a casquinha perfeita</div></div>
+  <div class="stat-item reveal d1"><div class="stat-num">2,5 <span style="font-size:1rem">s</span></div><div class="stat-desc">Derretimento da ganache no palato</div></div>
+  <div class="stat-item reveal d2"><div class="stat-pre">Até</div><div class="stat-num">3.500 <span style="font-size:1rem">g</span></div><div class="stat-desc">Peso máximo com cobertura especial opcional</div></div>
+  <div class="stat-item reveal d3"><div class="stat-num">100<span style="font-size:1.2rem">%</span></div><div class="stat-desc">Ingredientes selecionados artesanalmente</div></div>
+</div>
+
+<!-- HIGHLIGHTS -->
+<section class="highlights">
+  <div class="sec-label reveal">Destaques</div>
+  <h2 class="sec-title reveal">Excepcional por dentro e por fora.</h2>
+  <p class="sec-sub reveal">Cada detalhe do Bolo Turbo Coupé foi concebido para superar expectativas — da seleção dos ingredientes ao acabamento final.</p>
+  <div class="hl-grid">
+    <div class="hl-card reveal d1"><div class="hl-imgwrap"><img src="https://images.unsplash.com/photo-1542826438-bd32f43d626f?w=600&auto=format&fit=crop" alt="DNA"><div class="hl-ov"></div></div><div class="hl-info"><h3>DNA da Confeitaria.</h3><p>Melhor do que nunca, o Bolo Turbo combina sabor intenso com praticidade na festa, conforto nas sobremesas longas e capacidade de impressionar a todos.</p><span class="hl-arrow">Saber mais →</span></div></div>
+    <div class="hl-card reveal d2"><div class="hl-imgwrap"><img src="https://images.unsplash.com/photo-1611293388250-580b08c4a145?w=600&auto=format&fit=crop" alt="Decoração"><div class="hl-ov"></div></div><div class="hl-info"><h3>Experiência de decoração.</h3><p>A maior área de cobertura em um bolo artesanal, os modos de decoração interativa¹ e a nova geração de camadas oferecem uma experiência única de sabor.</p><span class="hl-arrow">Saber mais →</span></div></div>
+    <div class="hl-card reveal d3"><div class="hl-imgwrap"><img src="https://images.unsplash.com/photo-1562440499-64c9a111f713?w=600&auto=format&fit=crop" alt="Recheio"><div class="hl-ov"></div></div><div class="hl-info"><h3>Conforto no recheio.</h3><p>Recheio rápido em festas. Cobertura por indução¹ na residência. Sobremesa sem preocupações. As opções de confeitagem se adaptam às suas necessidades.</p><span class="hl-arrow">Saber mais →</span></div></div>
+  </div>
+</section>
+
+<!-- FEATURE SPLITS -->
+<div class="fsplit">
+  <div class="fimg reveal-l"><img src="https://images.unsplash.com/photo-1519869325930-281384150729?w=900&auto=format&fit=crop" alt="Glacê"></div>
+  <div class="ftxt reveal-r"><div class="sec-label">Design</div><h2>Glacê ativo aerodinâmico.</h2><p>Uma característica notável do Bolo Turbo Coupé é o seu glacê ativo, posicionado nos lados direito e esquerdo do topo. Como parte do sistema de Confeitagem Ativa (CAP), o glacê otimiza as propriedades aerodinâmicas junto com o acabamento traseiro de extensão adaptável.</p><p>Um detalhe emocionante: as coordenadas GPS da cozinha do confeiteiro estão gravadas na decoração em açúcar.</p><button class="read-more">Ver mais →</button></div>
+</div>
+<div class="fsplit">
+  <div class="ftxt reveal-l" style="background:#0a0a0a"><div class="sec-label">Recheio</div><h2>Wireless Recheio System.¹</h2><p>O Bolo Turbo Coupé define novos padrões de conforto ao ser recheado em sua residência. Graças à capacidade de recheio por injeção e à base do Wireless Recheio System, tudo o que você precisa fazer é posicionar o bolo sobre a placa de recheio.</p><p>O processo de confeitagem começa automaticamente e termina quando finalizado.</p><button class="read-more">Ver mais →</button></div>
+  <div class="fimg reveal-r"><img src="https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=900&auto=format&fit=crop" alt="Wireless"></div>
+</div>
+
+<!-- CONFECTION -->
+<section class="confection">
+  <h2 class="reveal">Experiência de confeitagem<br>que lembra um pit stop.</h2>
+  <div class="ctabs">
+    <button class="ctab active" data-cp="casa">Confeitagem em casa</button>
+    <button class="ctab" data-cp="festa">Confeitagem na festa</button>
+    <button class="ctab" data-cp="tech">Tecnologia</button>
+  </div>
+
+  <div class="cpanel active" id="cp-casa">
+    <div style="background:var(--bg2);border-bottom:1px solid rgba(255,255,255,.04)"><div class="citem"><img class="cimg" src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop" alt=""><div class="cbody"><h4>Duas aberturas de recheio.</h4><p>O Bolo Turbo Coupé tem uma porta de recheio em cada lado para facilitar o acesso, com capacidade de até 11 camadas¹.</p><button class="ctoggle" onclick="tglConf('c1',this)">Ver mais <span>↓</span></button></div></div><div class="cexpand" id="c1"><img class="cexpand-img" src="https://images.unsplash.com/photo-1562440499-64c9a111f713?w=1400&auto=format&fit=crop" alt=""><div class="cexpand-txt"><div><strong>Detalhe técnico</strong><p>Cada abertura é dotada de um sistema de vedação automática em açúcar temperado que preserva a umidade interna por até 72 horas após o recheio.</p></div><div><strong>Aplicação</strong><p>Compatível com recheios à base de creme, ganache, doce de leite e frutas frescas. A porta esquerda é reservada para recheios acima de 390 kCal por camada.</p></div></div></div></div>
+    <div style="background:var(--bg2);border-bottom:1px solid rgba(255,255,255,.04)"><div class="citem"><img class="cimg" src="https://images.unsplash.com/photo-1559620192-032c4bc4674e?w=300&auto=format&fit=crop" alt=""><div class="cbody"><h4>Desempenho de confeitagem consistentemente alto.</h4><p>A inovadora arquitetura permite o recheio rápido de 800 camadas por hora com potência de até 390 kCal¹.</p><button class="ctoggle" onclick="tglConf('c2',this)">Ver mais <span>↓</span></button></div></div><div class="cexpand" id="c2"><img class="cexpand-img" src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=1400&auto=format&fit=crop" alt=""><div class="cexpand-txt"><div><strong>Arquitetura de recheio</strong><p>O sistema opera em voltagem dupla de 800 camadas/hora, garantindo desempenho consistente independentemente da temperatura ou umidade do ambiente.</p></div><div><strong>Gestão térmica</strong><p>Gestão térmica inteligente mantém a temperatura da ganache entre 32°C e 34°C durante todo o processo, otimizando brilho e preparo.</p></div></div></div></div>
+    <div style="background:var(--bg2);border-bottom:1px solid rgba(255,255,255,.04)"><div class="citem"><img class="cimg" src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=300&auto=format&fit=crop" alt="Receita Planner"><div class="cbody"><h4>Receita Planner.</h4><p>Com orientação de sabor ativa, o Receita Planner garante festas longas sem atrasos desnecessários.</p><button class="ctoggle" onclick="tglConf('c3',this)">Ver mais <span>↓</span></button></div></div><div class="cexpand" id="c3"><img class="cexpand-img" src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=1400&auto=format&fit=crop" alt="Receita Planner em ação"><div class="cexpand-txt"><div><strong>Planejamento inteligente</strong><p>Calcula automaticamente as paradas de recheio considerando o perfil de cada convidado, intolerâncias e estoque de ingredientes em tempo real.</p></div><div><strong>Pré-condicionamento</strong><p>Pré-condiona a massa antes de cada etapa, reduzindo o tempo de produção em até 23% e garantindo transições perfeitas entre sabores.</p></div></div></div></div>
+    <div style="background:var(--bg2)"><div class="citem"><img class="cimg" src="https://images.unsplash.com/photo-1611293388250-580b08c4a145?w=300&auto=format&fit=crop" alt=""><div class="cbody"><h4>Massa de alto desempenho.</h4><p>O motor de asas de borboleta gera 1.156 g de recheio com torque máximo de 1.130 Nm de creme de manteiga.</p><button class="ctoggle" onclick="tglConf('c4',this)">Ver mais <span>↓</span></button></div></div><div class="cexpand" id="c4"><img class="cexpand-img" src="https://images.unsplash.com/photo-1586788680434-30d324b2d46f?w=1400&auto=format&fit=crop" alt=""><div class="cexpand-txt"><div><strong>Tecnologia de propulsão</strong><p>Duplo motor elétrico de asas de borboleta distribui o torque instantaneamente entre recheio frontal e traseiro, garantindo estabilidade perfeita em cada camada.</p></div><div><strong>Potência overboost</strong><p>Com Overboost ativado, a massa libera até 1.156 g de potência por 2,5 segundos — suficiente para impressionar qualquer crítico gastronômico.</p></div></div></div></div>
+  </div>
+
+  <div class="cpanel" id="cp-festa">
+    <div style="background:var(--bg2);border-bottom:1px solid rgba(255,255,255,.04)"><div class="citem"><img class="cimg" src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300&auto=format&fit=crop" alt=""><div class="cbody"><h4>Apresentação impecável.</h4><p>Cada bolo chega embalado em caixa de transporte climatizada, garantindo que a decoração chegue intacta ao evento.</p><button class="ctoggle" onclick="tglConf('f1',this)">Ver mais <span>↓</span></button></div></div><div class="cexpand" id="f1"><img class="cexpand-img" src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=1400&auto=format&fit=crop" alt=""><div class="cexpand-txt"><div><strong>Embalagem premium</strong><p>A caixa isotérmica mantém temperatura ideal de 8°C durante o transporte, preservando textura e brilho do glacê por até 4 horas após a entrega.</p></div><div><strong>Montagem no local</strong><p>Nossa equipe pode realizar a montagem final e posicionamento das decorações diretamente no evento, mediante agendamento prévio.</p></div></div></div></div>
+    <div style="background:var(--bg2)"><div class="citem"><img class="cimg" src="https://images.unsplash.com/photo-1519869325930-281384150729?w=300&auto=format&fit=crop" alt=""><div class="cbody"><h4>Corte preciso e rendimento garantido.</h4><p>O guia de corte incluso assegura porções uniformes, maximizando o rendimento e a apresentação de cada fatia.</p><button class="ctoggle" onclick="tglConf('f2',this)">Ver mais <span>↓</span></button></div></div><div class="cexpand" id="f2"><img class="cexpand-img" src="https://images.unsplash.com/photo-1562440499-64c9a111f713?w=1400&auto=format&fit=crop" alt=""><div class="cexpand-txt"><div><strong>Guia de corte</strong><p>O diagrama de corte digital enviado junto ao bolo indica o ângulo e a profundidade ideais para cada tamanho de fatia.</p></div><div><strong>Rendimento</strong><p>O Turbo Coupé padrão rende entre 30 e 40 porções. Com camadas extras, pode chegar a 60 porções.</p></div></div></div></div>
+  </div>
+
+  <div class="cpanel" id="cp-tech">
+    <div style="background:var(--bg2);border-bottom:1px solid rgba(255,255,255,.04)"><div class="citem"><img class="cimg" src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop" alt=""><div class="cbody"><h4>Sensor de frescor integrado.</h4><p>QR code exclusivo em cada bolo vinculado ao sistema de rastreamento de frescor em tempo real via app.</p><button class="ctoggle" onclick="tglConf('t1',this)">Ver mais <span>↓</span></button></div></div><div class="cexpand" id="t1"><img class="cexpand-img" src="https://images.unsplash.com/photo-1559620192-032c4bc4674e?w=1400&auto=format&fit=crop" alt=""><div class="cexpand-txt"><div><strong>Rastreamento</strong><p>O sistema identifica data e hora de produção, temperatura de armazenamento e janela ideal de consumo — tudo acessível pelo QR code impresso na embalagem.</p></div><div><strong>Notificações</strong><p>O app envia notificação quando o bolo está no pico ideal de consumo e quando se aproxima do limite de validade para garantir máxima experiência sensorial.</p></div></div></div></div>
+    <div style="background:var(--bg2)"><div class="citem"><img class="cimg" src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=300&auto=format&fit=crop" alt=""><div class="cbody"><h4>Recomendação por IA.</h4><p>Algoritmo proprietário analisa perfil do evento e sugere a combinação ideal de sabores e decoração automaticamente.</p><button class="ctoggle" onclick="tglConf('t2',this)">Ver mais <span>↓</span></button></div></div><div class="cexpand" id="t2"><img class="cexpand-img" src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=1400&auto=format&fit=crop" alt=""><div class="cexpand-txt"><div><strong>Machine Learning</strong><p>Treinado com mais de 12.000 combinações testadas, o sistema aprende as preferências do cliente e aprimora cada sugestão ao longo do tempo.</p></div><div><strong>Integração</strong><p>Disponível via app e no configurador online. O modelo de IA é atualizado mensalmente com novas receitas sazonais e tendências globais de confeitaria.</p></div></div></div></div>
+  </div>
+</section>
+
+<!-- PROCESSO -->
+<section class="processo" id="processo">
+  <div class="sec-label reveal">Processo</div>
+  <h2 class="sec-title reveal">Da receita ao seu evento.</h2>
+  <p class="sec-sub reveal">Cada bolo Boulangerie Turbo passa por um processo rigoroso de criação artesanal, controlado em cada etapa por confeiteiros certificados.</p>
+  <div class="timeline">
+    <div class="tl-step reveal d1"><div class="tl-node"><span>01</span></div><h4>Seleção dos Ingredientes</h4><p>Farinha tipo 00, manteiga normanda e chocolate Valrhona selecionados manualmente por nosso sommelier de ingredientes.</p></div>
+    <div class="tl-step reveal d2"><div class="tl-node"><span>02</span></div><h4>Fermentação &amp; Preparo</h4><p>A massa descansa por 24 horas em câmara controlada a 4°C. O recheio é preparado à temperatura exata de 34°C.</p></div>
+    <div class="tl-step reveal d3"><div class="tl-node"><span>03</span></div><h4>Montagem das Camadas</h4><p>Cada disco é montado sobre nivelador a laser. As camadas são aplicadas com precisão milimétrica por confeiteiro sênior.</p></div>
+    <div class="tl-step reveal d4"><div class="tl-node"><span>04</span></div><h4>Acabamento &amp; Entrega</h4><p>Cobertura em três etapas, decoração artesanal e embalagem em caixa isotérmica para entrega impecável ao evento.</p></div>
+  </div>
+  <div class="tl-imgs">
+    <div class="tl-img"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&auto=format&fit=crop" alt="Seleção dos ingredientes"><div class="tl-lbl">Seleção dos ingredientes</div></div>
+    <div class="tl-img"><img src="https://images.unsplash.com/photo-1605807646983-377bc5a76493?w=400&auto=format&fit=crop" alt="Fermentação e preparo"><div class="tl-lbl">Fermentação &amp; preparo</div></div>
+    <div class="tl-img"><img src="https://images.unsplash.com/photo-1559620192-032c4bc4674e?w=400&auto=format&fit=crop" alt="Montagem das camadas"><div class="tl-lbl">Montagem das camadas</div></div>
+    <div class="tl-img"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&auto=format&fit=crop" alt="Acabamento e entrega"><div class="tl-lbl">Acabamento &amp; entrega</div></div>
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section class="galeria" id="galeria">
+  <div class="sec-label reveal">Galeria</div>
+  <h2 class="sec-title reveal">Criações que falam por si mesmas.</h2>
+  <p class="sec-sub reveal">Cada fotografia captura o nível de detalhe e sofisticação que define a Boulangerie Turbo. Clique para ampliar.</p>
+  <div class="gal-grid">
+    <div class="gal-item" onclick="lbOpen(this.querySelector('img').src,'Bolo Turbo Coupé — Edição Especial')"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=900&auto=format&fit=crop" alt=""><div class="gal-ov"><div class="gal-zoom">⊕</div></div><div class="gal-lbl">Bolo Turbo Coupé — Edição Especial</div></div>
+    <div class="gal-item" onclick="lbOpen(this.querySelector('img').src,'Camadas de Chocolate Belga')"><img src="https://images.unsplash.com/photo-1559620192-032c4bc4674e?w=500&auto=format&fit=crop" alt=""><div class="gal-ov"><div class="gal-zoom">⊕</div></div><div class="gal-lbl">Camadas de Chocolate Belga</div></div>
+    <div class="gal-item" onclick="lbOpen(this.querySelector('img').src,'Decoração Artesanal')"><img src="https://images.unsplash.com/photo-1611293388250-580b08c4a145?w=500&auto=format&fit=crop" alt=""><div class="gal-ov"><div class="gal-zoom">⊕</div></div><div class="gal-lbl">Decoração Artesanal</div></div>
+    <div class="gal-item" onclick="lbOpen(this.querySelector('img').src,'Recheio Ganache Valrhona')"><img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=500&auto=format&fit=crop" alt=""><div class="gal-ov"><div class="gal-zoom">⊕</div></div><div class="gal-lbl">Recheio Ganache Valrhona</div></div>
+    <div class="gal-item" onclick="lbOpen(this.querySelector('img').src,'Casamento — Linha Clássica')"><img src="https://images.unsplash.com/photo-1519869325930-281384150729?w=900&auto=format&fit=crop" alt=""><div class="gal-ov"><div class="gal-zoom">⊕</div></div><div class="gal-lbl">Casamento — Linha Clássica</div></div>
+    <div class="gal-item" onclick="lbOpen(this.querySelector('img').src,'Acabamento Espelhado')"><img src="https://images.unsplash.com/photo-1562440499-64c9a111f713?w=500&auto=format&fit=crop" alt=""><div class="gal-ov"><div class="gal-zoom">⊕</div></div><div class="gal-lbl">Acabamento Espelhado</div></div>
+  </div>
+</section>
+
+<!-- CUSTOMIZACAO -->
+<section class="custom" id="customizacao">
+  <div class="sec-label reveal">Configurador</div>
+  <h2 class="sec-title reveal">Monte o bolo dos seus sonhos.</h2>
+  <p class="sec-sub reveal">Escolha cada detalhe e veja o resultado em tempo real.</p>
+  <div class="custom-layout">
+    <div class="custom-controls">
+      <div><div class="cg-lbl">Modelo base</div><div class="copts">
+        <button class="copt sel" onclick="selCust('modelo',this,'Coupé',220,'https://images.unsplash.com/photo-1586788680434-30d324b2d46f?w=600&auto=format&fit=crop')">Coupé — R$220</button>
+        <button class="copt" onclick="selCust('modelo',this,'S Coupé',360,'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&auto=format&fit=crop')">S Coupé — R$360</button>
+        <button class="copt" onclick="selCust('modelo',this,'Turbo Coupé',480,'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&auto=format&fit=crop')">Turbo Coupé — R$480</button>
+      </div></div>
+      <div><div class="cg-lbl">Recheio</div><div class="copts">
+        <button class="copt sel" onclick="selCust('recheio',this,'Ganache 70%',0,null)">Ganache 70%</button>
+        <button class="copt" onclick="selCust('recheio',this,'Mousse Maracujá',40,null)">Mousse Maracujá +R$40</button>
+        <button class="copt" onclick="selCust('recheio',this,'Doce de Leite',30,null)">Doce de Leite +R$30</button>
+        <button class="copt" onclick="selCust('recheio',this,'Avelã Premium',60,null)">Avelã Premium +R$60</button>
+      </div></div>
+      <div><div class="cg-lbl">Cobertura</div><div class="copts">
+        <button class="copt sel" onclick="selCust('cobertura',this,'Liso Espelhado',0,null)">Liso Espelhado</button>
+        <button class="copt" onclick="selCust('cobertura',this,'Textura Rústica',20,null)">Rústico +R$20</button>
+        <button class="copt" onclick="selCust('cobertura',this,'Drip Ganache',35,null)">Drip Ganache +R$35</button>
+        <button class="copt" onclick="selCust('cobertura',this,'Naked Cake',0,null)">Naked Cake</button>
+      </div></div>
+      <div><div class="cg-lbl">Cor da cobertura</div><div class="color-row">
+        <div class="cswatch sel" style="background:#f5f0e8" title="Creme" onclick="selColor(this,'Creme')"></div>
+        <div class="cswatch" style="background:#3d2014" title="Chocolate" onclick="selColor(this,'Chocolate')"></div>
+        <div class="cswatch" style="background:#c8a84b" title="Caramelo" onclick="selColor(this,'Caramelo')"></div>
+        <div class="cswatch" style="background:#e8b4b8" title="Rosa" onclick="selColor(this,'Rosa')"></div>
+        <div class="cswatch" style="background:#2c3e50" title="Noturno" onclick="selColor(this,'Noturno')"></div>
+        <div class="cswatch" style="background:#c0392b" title="Red Velvet" onclick="selColor(this,'Red Velvet')"></div>
+      </div></div>
+      <div><div class="cg-lbl">Camadas de recheio</div>
+        <div class="layer-ctrl">
+          <button class="layer-btn" onclick="chgLayer(-1)">−</button>
+          <span class="layer-val" id="lval">4</span>
+          <button class="layer-btn" onclick="chgLayer(1)">+</button>
+          <span style="font-size:11px;color:var(--text-dim);letter-spacing:1px">camadas</span>
+        </div>
+      </div>
+      <button class="custom-cta rpl shine" onclick="openModal()">Encomendar esta configuração →</button>
+    </div>
+    <div class="custom-preview">
+      <div class="custom-display">
+        <img class="custom-img" id="cimg" src="https://images.unsplash.com/photo-1586788680434-30d324b2d46f?w=600&auto=format&fit=crop" alt="Preview">
+        <div class="custom-price-row"><span class="custom-price-lbl">Total estimado</span><span class="custom-price-val" id="ctotal">R$ 220</span></div>
+        <div class="custom-sum">
+          <div class="custom-sum-line"><span>Modelo</span><span id="s-modelo">Coupé</span></div>
+          <div class="custom-sum-line"><span>Recheio</span><span id="s-recheio">Ganache 70%</span></div>
+          <div class="custom-sum-line"><span>Cobertura</span><span id="s-cobertura">Liso Espelhado</span></div>
+          <div class="custom-sum-line"><span>Cor</span><span id="s-cor">Creme</span></div>
+          <div class="custom-sum-line"><span>Camadas</span><span id="s-camadas">4</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING PRICE BAR -->
+  <div class="price-float reveal">
+    <div class="price-float-left">
+      <span class="price-float-label">Valor total da configuração</span>
+      <span class="price-float-val" id="price-float-val">R$ 220</span>
+      <span class="price-float-detail" id="price-float-detail">Coupé · Ganache 70% · Liso Espelhado · 4 camadas</span>
+    </div>
+    <button class="price-float-btn shine rpl" onclick="openModal()">Encomendar agora →</button>
+  </div>
+</section>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✦</span>
+  <span class="toast-msg" id="toast-msg">Ação realizada</span>
+</div>
+
+<!-- DEPOIMENTOS -->
+<section class="dep" id="depoimentos">
+  <div class="sec-label reveal">Clientes</div>
+  <h2 class="sec-title reveal">O que dizem nossos convidados.</h2>
+  <p class="sec-sub reveal">Mais de 1.200 eventos atendidos. Uma experiência que vai muito além do sabor.</p>
+  <div class="dep-grid">
+    <div class="dep-card reveal d1"><div class="dep-stars"><span class="dep-star">★</span><span class="dep-star">★</span><span class="dep-star">★</span><span class="dep-star">★</span><span class="dep-star">★</span></div><p class="dep-txt">O Bolo Turbo Coupé transformou o casamento da minha filha. Os convidados ainda falam sobre aquele ganache. Jamais vi um bolo com tanta precisão e sabor ao mesmo tempo.</p><div class="dep-author"><div class="dep-av"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&facepad=3" alt=""></div><div><div class="dep-name">Mariana Cavalcante</div><div class="dep-role">Casamento · Porto Alegre</div><span class="dep-badge">Cliente verificado</span></div></div></div>
+    <div class="dep-card reveal d2"><div class="dep-stars"><span class="dep-star">★</span><span class="dep-star">★</span><span class="dep-star">★</span><span class="dep-star">★</span><span class="dep-star">★</span></div><p class="dep-txt">Sou crítico gastronômico há 15 anos e raramente me impressiono com confeitaria local. O Turbo Coupé me surpreendeu em cada camada. O nível de acabamento é europeu.</p><div class="dep-author"><div class="dep-av"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&facepad=3" alt=""></div><div><div class="dep-name">Ricardo Fontana</div><div class="dep-role">Crítico Gastronômico</div><span class="dep-badge">Imprensa</span></div></div></div>
+    <div class="dep-card reveal d3"><div class="dep-stars"><span class="dep-star">★</span><span class="dep-star">★</span><span class="dep-star">★</span><span class="dep-star">★</span><span class="dep-star" style="color:rgba(200,168,75,.3)">★</span></div><p class="dep-txt">A entrega foi impecável, o bolo chegou perfeito ao aniversário de 60 anos do meu pai. O processo de encomenda online foi simples e a equipe super atenciosa. Recomendo!</p><div class="dep-author"><div class="dep-av"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&auto=format&fit=crop&facepad=3" alt=""></div><div><div class="dep-name">Fernanda Lopes</div><div class="dep-role">Aniversário · São Paulo</div><span class="dep-badge">Cliente verificado</span></div></div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="encomendar">
+  <div class="cta-bg"><img src="https://images.unsplash.com/photo-1465014925804-7b9ede58d0d7?w=1800&auto=format&fit=crop" alt="CTA"></div>
+  <div class="cta-ov"></div><div class="cta-gld"></div>
+  <div class="cta-content">
+    <div class="sec-label" style="margin-bottom:1.5rem">Encomendar</div>
+    <h2>O bolo que o seu evento <em>merece.</em></h2>
+    <p>Não se contente com o comum. Encomende agora o Bolo Turbo Coupé Confeitado e eleve o nível do seu próximo evento para uma experiência que ninguém vai esquecer.</p>
+    <div class="cta-actions">
+      <button class="btn-cta rpl shine" onclick="openModal()">Encomendar agora</button>
+      <button class="btn-cta-g shine" id="cta-whatsapp" onclick="openWhatsApp()">Falar com confeiteiro</button>
+    </div>
+    <div class="cta-trust">
+      <div class="cta-trust-item">Entrega em 5 dias úteis</div>
+      <div class="cta-trust-item">Garantia de frescor</div>
+      <div class="cta-trust-item">Transporte climatizado</div>
+    </div>
+  </div>
+</section>
+
+<p class="footnote">¹Disponível como extra opcional. Disponível a partir do segundo semestre de 2026, no mínimo. ²Potência máxima de confeitagem durante um processo de recheio de 10% a 80% em condições ideais: 390 kCal. ³Tempo de confeitagem para corrente contínua de açúcar (DCA) em condições ideais. Imagens meramente ilustrativas.</p>
+
+<div class="feedback">
+  <h3>Feedback</h3>
+  <p>Quão útil é a informação desta página para você?</p>
+  <div class="rating-row">
+    <span class="rating-lbl">Não ajuda</span>
+    <button class="rbt" onclick="rate(this)">1</button>
+    <button class="rbt" onclick="rate(this)">2</button>
+    <button class="rbt" onclick="rate(this)">3</button>
+    <button class="rbt" onclick="rate(this)">4</button>
+    <button class="rbt on" onclick="rate(this)">5</button>
+    <span class="rating-lbl">Muitíssimo útil</span>
+  </div>
+</div>
+
+<!-- CONTATO -->
+<section class="contato" id="contato">
+  <div class="sec-label reveal">Contato</div>
+  <h2 class="sec-title reveal">Fale com a gente.</h2>
+  <p class="sec-sub reveal">Estamos prontos para tornar o seu evento inesquecível. Entre em contato pelo canal de sua preferência.</p>
+  <div class="contact-grid">
+    <div class="contact-card reveal d1">
+      <div class="cc-icon">📞</div>
+      <div class="cc-label">Telefone</div>
+      <div class="cc-main">(51) 99810-0017</div>
+      <div class="cc-sub">Seg–Sex, 9h–18h<br>Sábados, 9h–13h</div>
+      <a class="cc-btn shine" href="tel:+5551998100017">Ligar agora →</a>
+    </div>
+    <div class="contact-card reveal d2">
+      <div class="cc-icon">✉️</div>
+      <div class="cc-label">E-mail</div>
+      <div class="cc-main">joaogabrielperugini@gmail.com</div>
+      <div class="cc-sub">Respondemos em até<br>2 horas úteis</div>
+      <a class="cc-btn ghost shine" href="mailto:joaogabrielperugini@gmail.com">Enviar e-mail →</a>
+    </div>
+    <div class="contact-card reveal d3">
+      <div class="cc-icon">💬</div>
+      <div class="cc-label">WhatsApp</div>
+      <div class="cc-main">Atendimento direto</div>
+      <div class="cc-sub">Envie sua encomenda<br>com mensagem automática</div>
+      <a class="cc-btn cc-whatsapp shine" id="wa-btn" href="#" target="_blank" rel="noopener">WhatsApp →</a>
+    </div>
+  </div>
+  <div class="contact-info-strip reveal">
+    <div class="cis-item"><span class="cis-label">Localização</span><span class="cis-value">Porto Alegre, RS</span></div>
+    <div class="cis-item"><span class="cis-label">Prazo mínimo</span><span class="cis-value">5 dias úteis</span></div>
+    <div class="cis-item"><span class="cis-label">Entrega</span><span class="cis-value">Até 50 km do centro</span></div>
+    <div class="cis-item"><span class="cis-label">Pagamento</span><span class="cis-value">Pix · Transferência</span></div>
+  </div>
+</section>
+
+<!-- ORDER MODAL -->
+<div id="modal" onclick="modalBgClose(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div id="modal-main">
+      <div class="modal-top">
+        <div class="modal-top-gold"></div>
+        <div class="modal-greeting" id="modal-greeting">Seu pedido</div>
+        <div class="modal-title" id="modal-title">Confirmar encomenda</div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-summary" id="modal-summary">
+          <div class="ms-line"><span>Modelo</span><span id="ms-modelo">Turbo Coupé Confeitado</span></div>
+          <div class="ms-line"><span>Recheio</span><span id="ms-recheio">Ganache 70%</span></div>
+          <div class="ms-line"><span>Cobertura</span><span id="ms-cobertura">Liso Espelhado</span></div>
+          <div class="ms-line"><span>Camadas</span><span id="ms-camadas">4</span></div>
+          <div class="ms-line"><span>Entrega estimada</span><span>5 dias úteis</span></div>
+        </div>
+        <div class="ms-total">
+          <span>Total estimado</span>
+          <span id="ms-total">R$ 480</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-confirm shine rpl" id="modal-confirm-btn" onclick="confirmOrder(this)">Confirmar pedido →</button>
+        <button class="modal-cancel" onclick="closeModal()">Voltar</button>
+      </div>
+    </div>
+    <div class="modal-success" id="modal-success">
+      <div class="success-icon">🎂</div>
+      <div class="modal-greeting" id="success-greeting"></div>
+      <div class="success-title">Pedido recebido!</div>
+      <p class="success-sub">Entraremos em contato em até 2 horas úteis para confirmar os detalhes e o prazo de entrega.<br><br>
+        <a href="mailto:joaogabrielperugini@gmail.com" style="color:var(--gold)">joaogabrielperugini@gmail.com</a>
+      </p>
+      <button class="modal-confirm shine" style="margin-top:2rem;width:100%" onclick="closeModal()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-top">
+    <div class="ft-brand"><div class="ft-brand-logo">🎂 Boulangerie <em>Turbo</em></div><p>Confeitaria artesanal de alto desempenho. Cada bolo é uma obra de precisão gastronômica, feita para impressionar em qualquer ocasião.</p></div>
+    <div class="ft-col"><h5>Modelos</h5><a href="#">Bolo Turbo Coupé</a><a href="#">Bolo S Coupé</a><a href="#">Linha Clássica</a><a href="#">Linha Mousse</a></div>
+    <div class="ft-col"><h5>Serviços</h5><a href="#">Configurador</a><a href="#">Encomendas</a><a href="#">Eventos</a><a href="#">Degustação</a></div>
+    <div class="ft-col"><h5>Empresa</h5><a href="#">Nossa história</a><a href="#">Confeiteiros</a><a href="#">Sustentabilidade</a><a href="#">Contato</a></div>
+  </div>
+  <div class="ft-bot">
+    <span class="ft-legal">© 2026 Boulangerie Turbo. Todos os direitos reservados.</span>
+    <div class="ft-links"><a href="#">Cookies</a><a href="#">Privacidade</a><a href="#">Aviso Legal</a></div>
+  </div>
+</footer>
+
+<script>
+/* ═══ UTILS ═══ */
+function sanitize(s){return s.replace(/[<>&"']/g,'').trim().slice(0,30)}
+
+/* ═══ TOAST ═══ */
+let _toastTimer;
+function showToast(msg,icon='✦'){
+  const t=document.getElementById('toast');
+  const m=document.getElementById('toast-msg');
+  if(!t||!m)return;
+  m.textContent=msg;
+  t.querySelector('.toast-icon').textContent=icon;
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+/* ═══ WHATSAPP ═══ */
+function openWhatsApp(customMsg){
+  const name=localStorage.getItem('bt_name');
+  const cleanName=(name&&name!=='__skip__')?name:null;
+  const msg=customMsg||
+    (cleanName
+      ? `Olá! Sou ${cleanName} e gostaria de falar sobre um bolo personalizado. 🎂`
+      : 'Olá, gostaria de falar sobre um bolo personalizado. 🎂');
+  window.open('https://wa.me/5551998100017?text='+encodeURIComponent(msg),'_blank');
+}
+
+/* ═══ ONBOARDING ═══ */
+const OB=document.getElementById('onboard');
+const nameInput=document.getElementById('ob-name');
+let userName='';
+
+function applyName(n){
+  userName=n;
+  if(!n)return;
+  const hs=document.getElementById('hero-sub');
+  if(hs)hs.innerHTML=`Bem-vindo, <span class="name-hl">${n}</span>. A nova geração da confeitaria de alto desempenho.`;
+  const chip=document.getElementById('nav-welcome');
+  const chipName=document.getElementById('nav-name-chip');
+  if(chip&&chipName){chipName.textContent=n;chip.style.display='none';}
+  const mg=document.getElementById('models-greeting');
+  const mn=document.getElementById('models-name');
+  if(mg&&mn){mn.textContent=n;mg.style.display='block';}
+  // set WA button in contact section with personalized message
+  const wa=document.getElementById('wa-btn');
+  if(wa){
+    const msg=`Olá! Sou ${n} e gostaria de encomendar um bolo. 🎂`;
+    wa.href='https://wa.me/5551998100017?text='+encodeURIComponent(msg);
+  }
+}
+
+function obEnter(){
+  const raw=nameInput.value;
+  const n=sanitize(raw);
+  if(!n)return;
+  localStorage.setItem('bt_name',n);
+  OB.classList.add('hide');
+  setTimeout(()=>{OB.style.display='none';},900);
+  applyName(n);
+}
+
+function obSkip(){
+  localStorage.setItem('bt_name','__skip__');
+  OB.classList.add('hide');
+  setTimeout(()=>{OB.style.display='none';},900);
+  const wa=document.getElementById('wa-btn');
+  if(wa){
+    const msg='Olá! Gostaria de encomendar um bolo. 🎂';
+    wa.href='https://wa.me/5551998100017?text='+encodeURIComponent(msg);
+  }
+}
+
+nameInput.addEventListener('input',()=>{
+  document.getElementById('ob-enter').disabled=nameInput.value.trim().length===0;
+});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter')obEnter();});
+
+// Check localStorage on load
+(function(){
+  const saved=localStorage.getItem('bt_name');
+  if(saved){
+    OB.style.display='none';
+    if(saved!=='__skip__')applyName(saved);
+    else{
+      const wa=document.getElementById('wa-btn');
+      if(wa){wa.href='https://wa.me/5551998100017?text='+encodeURIComponent('Olá! Gostaria de encomendar um bolo. 🎂');}
+    }
+  }
+})();
+
+document.querySelector('.nav-logo').addEventListener('dblclick',()=>{
+  if(confirm('Redefinir seu nome?')){localStorage.removeItem('bt_name');location.reload();}
+});
+
+/* ═══ SCROLL PROGRESS ═══ */
+const sp=document.getElementById('sp');
+window.addEventListener('scroll',()=>{
+  sp.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';
+},{passive:true});
+
+/* ═══ BACK TO TOP ═══ */
+const btt=document.getElementById('btt');
+window.addEventListener('scroll',()=>btt.classList.toggle('show',window.scrollY>400),{passive:true});
+
+/* ═══ NAV SCROLL ═══ */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60),{passive:true});
+
+/* ═══ PARALLAX ═══ */
+const hbg=document.getElementById('hbg');
+window.addEventListener('scroll',()=>{
+  if(window.scrollY<window.innerHeight*1.2)
+    hbg.style.transform=`translateY(${window.scrollY*.25}px)`;
+},{passive:true});
+
+/* ═══ SCROLL REVEAL ═══ */
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});
+},{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>ro.observe(el));
+
+/* ═══ VARIANT TABS ═══ */
+document.querySelectorAll('.vtab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.vtab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.querySelectorAll('.vpanel').forEach(p=>p.classList.remove('active'));
+    const panel=document.getElementById('p-'+t.dataset.p);
+    if(panel){
+      panel.classList.add('active');
+      panel.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>{
+        el.classList.remove('on');
+        setTimeout(()=>el.classList.add('on'),50);
+      });
+    }
+  });
+});
+
+/* ═══ CONFECTION TABS ═══ */
+document.querySelectorAll('.ctab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.ctab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.querySelectorAll('.cpanel').forEach(p=>p.classList.remove('active'));
+    const panel=document.getElementById('cp-'+t.dataset.cp);
+    if(panel)panel.classList.add('active');
+  });
+});
+
+/* ═══ CONF EXPAND ═══ */
+function tglConf(id,btn){
+  const el=document.getElementById(id);
+  const open=el.classList.toggle('open');
+  const s=btn.querySelector('span');
+  if(s)s.textContent=open?'↑':'↓';
+}
+
+/* ═══ LIGHTBOX ═══ */
+function lbOpen(src,cap){
+  document.getElementById('lb-img').src=src;
+  document.getElementById('lb-cap').textContent=cap||'';
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function lbClose(e){
+  if(e&&e.target!==document.getElementById('lb')&&!e.target.classList.contains('lb-close'))return;
+  document.getElementById('lb').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    lbClose({target:document.getElementById('lb')});
+    closeModal();
+  }
+});
+
+/* ═══ PRICE ANIMATION (count-up) ═══ */
+function animatePrice(el, from, to){
+  if(!el)return;
+  const dur=400, steps=20, stepTime=dur/steps;
+  const diff=to-from;
+  let cur=from, step=0;
+  el.classList.add('bump');
+  setTimeout(()=>el.classList.remove('bump'),400);
+  const t=setInterval(()=>{
+    step++;
+    cur=Math.round(from+(diff*(step/steps)));
+    el.textContent='R$ '+cur;
+    if(step>=steps){el.textContent='R$ '+to;clearInterval(t);}
+  },stepTime);
+}
+
+/* ═══ CUSTOMIZADOR ═══ */
+let cp={modelo:220,recheio:0,cobertura:0,camadas:0};
+let layers=4;
+let cpLabels={modelo:'Coupé',recheio:'Ganache 70%',cobertura:'Liso Espelhado',cor:'Creme'};
+
+function getTotal(){return Object.values(cp).reduce((a,b)=>a+b,0)}
+
+function updateFloatBar(){
+  const fv=document.getElementById('price-float-val');
+  const fd=document.getElementById('price-float-detail');
+  if(fv){
+    const old=parseInt(fv.textContent.replace(/\D/g,''))||0;
+    animatePrice(fv,old,getTotal());
+  }
+  if(fd) fd.textContent=`${cpLabels.modelo} · ${cpLabels.recheio} · ${cpLabels.cobertura} · ${layers} camadas`;
+}
+
+function selCust(type,btn,label,price,img){
+  btn.closest('.copts').querySelectorAll('.copt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  const old=getTotal();
+  cp[type]=price;
+  cpLabels[type]=label;
+  document.getElementById('s-'+type).textContent=label;
+  const ctEl=document.getElementById('ctotal');
+  if(ctEl)animatePrice(ctEl,old,getTotal());
+  if(img){
+    const i=document.getElementById('cimg');
+    i.style.opacity='0';i.style.transform='scale(.97)';
+    setTimeout(()=>{i.src=img;i.style.transition='opacity .5s,transform .5s';i.style.opacity='1';i.style.transform='scale(1)';},200);
+  }
+  updateFloatBar();
+  showToast(`${label} selecionado`,'✓');
+}
+function selColor(sw,name){
+  sw.closest('.color-row').querySelectorAll('.cswatch').forEach(s=>s.classList.remove('sel'));
+  sw.classList.add('sel');
+  cpLabels.cor=name;
+  document.getElementById('s-cor').textContent=name;
+  showToast(`Cor: ${name}`,'🎨');
+}
+function chgLayer(d){
+  layers=Math.max(1,Math.min(11,layers+d));
+  const old=getTotal();
+  cp.camadas=layers>4?(layers-4)*20:0;
+  document.getElementById('lval').textContent=layers;
+  document.getElementById('s-camadas').textContent=layers;
+  const ctEl=document.getElementById('ctotal');
+  if(ctEl)animatePrice(ctEl,old,getTotal());
+  updateFloatBar();
+  showToast(`${layers} camada${layers>1?'s':''} selecionada${layers>1?'s':''}`,'◆');
+}
+
+/* ═══ ORDER MODAL ═══ */
+function openModal(modelName,modelPrice){
+  const name=modelName||cpLabels.modelo;
+  const price=modelPrice!==undefined?modelPrice:getTotal();
+  document.getElementById('ms-modelo').textContent=name;
+  document.getElementById('ms-recheio').textContent=cpLabels.recheio;
+  document.getElementById('ms-cobertura').textContent=cpLabels.cobertura;
+  document.getElementById('ms-camadas').textContent=layers;
+  document.getElementById('ms-total').textContent='R$ '+price;
+  const gr=document.getElementById('modal-greeting');
+  const title=document.getElementById('modal-title');
+  if(userName&&userName!=='__skip__'){
+    gr.textContent='Olá, '+userName+'!';
+    title.textContent='Confirmar sua encomenda';
+  } else {
+    gr.textContent='Seu pedido';
+    title.textContent='Confirmar encomenda';
+  }
+  // reset confirm button
+  const btn=document.getElementById('modal-confirm-btn');
+  if(btn){btn.classList.remove('btn-loading','btn-loading-white');btn.textContent='Confirmar pedido →';btn.disabled=false;}
+  document.getElementById('modal-main').style.display='block';
+  document.getElementById('modal-success').classList.remove('show');
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function modalBgClose(e){
+  if(e.target===document.getElementById('modal'))closeModal();
+}
+function confirmOrder(btn){
+  if(!btn)btn=document.getElementById('modal-confirm-btn');
+  // Loading state
+  btn.classList.add('btn-loading','btn-loading-white');
+  btn.textContent='Enviando';
+  btn.disabled=true;
+  // Simulate async send
+  setTimeout(()=>{
+    document.getElementById('modal-main').style.display='none';
+    const sg=document.getElementById('success-greeting');
+    sg.textContent=userName&&userName!=='__skip__'
+      ?'Pedido confirmado, '+userName+'! 🎂'
+      :'Pedido confirmado com sucesso! 🎂';
+    document.getElementById('modal-success').classList.add('show');
+    showToast('Pedido enviado com sucesso!','🎂');
+  },1800);
+}
+
+/* ═══ RATING ═══ */
+function rate(btn){
+  document.querySelectorAll('.rbt').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const val=btn.textContent;
+  showToast(`Avaliação ${val} registrada. Obrigado!`,'★');
+}
+
+/* ═══ RIPPLE ═══ */
+document.addEventListener('click',function(e){
+  const btn=e.target.closest('.rpl');
+  if(!btn)return;
+  const r=document.createElement('span');
+  r.style.cssText='position:absolute;border-radius:50%;background:rgba(255,255,255,.22);transform:scale(0);animation:_rpl .6s linear;pointer-events:none';
+  const rect=btn.getBoundingClientRect();
+  const sz=Math.max(rect.width,rect.height);
+  r.style.width=r.style.height=sz+'px';
+  r.style.left=(e.clientX-rect.left-sz/2)+'px';
+  r.style.top=(e.clientY-rect.top-sz/2)+'px';
+  btn.appendChild(r);
+  setTimeout(()=>r.remove(),700);
+});
+const _rs=document.createElement('style');
+_rs.textContent='@keyframes _rpl{to{transform:scale(4);opacity:0}}';
+document.head.appendChild(_rs);
+
+/* ═══ 3D TILT ═══ */
+document.querySelectorAll('.tilt').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`perspective(800px) rotateY(${x*8}deg) rotateX(${-y*8}deg) scale(1.02)`;
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.style.transform='perspective(800px) rotateY(0) rotateX(0) scale(1)';
+  });
+});
+
+/* ═══ COUNTER ANIMATION (stats bar) ═══ */
+const co=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting&&e.target.dataset.cnt){
+      const target=parseInt(e.target.dataset.cnt);
+      let cur=0;const step=target/30;
+      const t=setInterval(()=>{cur+=step;if(cur>=target){cur=target;clearInterval(t);}e.target.textContent=Math.floor(cur);},40);
+      co.unobserve(e.target);
+    }
+  });
+},{threshold:.5});
+document.querySelectorAll('[data-cnt]').forEach(el=>co.observe(el));
+
+/* ═══ AUTH SYSTEM ═══ */
+const AUTH_KEY='bt_users';
+const SESSION_KEY='bt_session';
+function getUsers(){try{return JSON.parse(localStorage.getItem(AUTH_KEY)||'[]');}catch{return[];}}
+function saveUsers(u){localStorage.setItem(AUTH_KEY,JSON.stringify(u));}
+function getSession(){try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'null');}catch{return null;}}
+function saveSession(u){localStorage.setItem(SESSION_KEY,JSON.stringify(u));}
+
+/* ─── API BASE URL ─── */
+var API_URL = 'http://localhost:3001/api'; // change to your production URL
+
+/* ─── Open auth modal ─── */
+function openAuth(tab){
+  tab=tab||'login';
+  switchAuthTab(tab);
+  // reset all fields
+  ['login-email','signup-name','signup-email','signup-pass']
+    .forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['login-email-err','signup-name-err','signup-email-err','signup-pass-err','otp-code-err']
+    .forEach(function(id){var el=document.getElementById(id);if(el){el.textContent='';el.classList.remove('show');}});
+  ['login-success','signup-success','otp-sent-msg'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.classList.remove('show');
+  });
+  // reset OTP to step 1
+  showOtpStep('email');
+  // clear OTP digits
+  document.querySelectorAll('.otp-digit').forEach(function(d){d.value='';});
+  // reset button states
+  var sb=document.getElementById('signup-btn');
+  if(sb){sb.classList.remove('btn-loading','btn-loading-white');sb.disabled=false;sb.textContent='Criar conta →';}
+  var rb=document.getElementById('otp-req-btn');
+  if(rb){rb.classList.remove('btn-loading','btn-loading-white');rb.disabled=false;rb.textContent='Enviar código →';}
+  document.getElementById('auth-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeAuth(){
+  document.getElementById('auth-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function authBgClose(e){if(e.target===document.getElementById('auth-modal'))closeAuth();}
+function switchAuthTab(tab){
+  ['login','signup'].forEach(function(t){
+    document.getElementById('tab-'+t).classList.toggle('active',t===tab);
+    document.getElementById('panel-'+t).classList.toggle('active',t===tab);
+  });
+}
+
+/* ─── Validation ─── */
+function validateEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
+function setErr(id,msg){
+  var el=document.getElementById(id);if(!el)return;
+  el.textContent=msg;msg?el.classList.add('show'):el.classList.remove('show');
+  var inp=document.getElementById(id.replace('-err',''));
+  if(inp){inp.classList.toggle('error',!!msg);}
+}
+function clearErr(id){setErr(id,'');}
+
+/* ─── Password strength ─── */
+function checkPwStrength(pw){
+  var bar=document.getElementById('pw-bar'),hint=document.getElementById('pw-hint');
+  if(!bar||!hint)return;
+  var score=0;
+  if(pw.length>=8)score++;if(pw.length>=12)score++;
+  if(/[A-Z]/.test(pw))score++;if(/[0-9]/.test(pw))score++;
+  if(/[^A-Za-z0-9]/.test(pw))score++;
+  var colors=['#e74c3c','#e67e22','#f1c40f','#27ae60','#27ae60'];
+  var widths=['20%','40%','60%','80%','100%'];
+  var hints=['Muito fraca','Fraca','Razoável','Boa — continue assim!','Excelente!'];
+  bar.style.width=pw?(widths[Math.max(0,score-1)]||'10%'):'0';
+  bar.style.background=pw?(colors[Math.max(0,score-1)]||'#e74c3c'):'';
+  hint.textContent=pw?(hints[Math.max(0,score-1)]||''):'';
+}
+
+/* ─── OTP FLOW ─── */
+var _otpEmail='';
+var _otpTimerInt=null;
+
+function showOtpStep(step){
+  document.querySelectorAll('.otp-step').forEach(function(s){s.classList.remove('active');});
+  var el=document.getElementById('otp-step-'+step);
+  if(el)el.classList.add('active');
+}
+
+function backToEmail(){
+  clearInterval(_otpTimerInt);
+  showOtpStep('email');
+  document.querySelectorAll('.otp-digit').forEach(function(d){d.value='';});
+  var vb=document.getElementById('otp-verify-btn');
+  if(vb)vb.disabled=true;
+}
+
+async function requestOTPFront(isResend){
+  var emailEl=document.getElementById('login-email');
+  var email=emailEl?emailEl.value.trim().toLowerCase():'';
+  clearErr('login-email-err');
+  if(!validateEmail(email)){setErr('login-email-err','Informe um e-mail válido.');return;}
+  _otpEmail=email;
+
+  var btn=document.getElementById('otp-req-btn');
+  if(btn){btn.classList.add('btn-loading','btn-loading-white');btn.disabled=true;btn.textContent='Enviando';}
+
+  var sent=false;
+  // Try real API first
+  try{
+    var resp=await fetch(API_URL+'/auth/request-otp',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email}),signal:AbortSignal.timeout(4000)
+    });
+    if(resp.ok)sent=true;
+  }catch(e){/* backend offline — fallback to local OTP */}
+
+  if(!sent){
+    // Local OTP simulation (dev mode)
+    var localCode=String(Math.floor(100000+Math.random()*900000));
+    localStorage.setItem('_dev_otp',JSON.stringify({email:email,code:localCode,exp:Date.now()+5*60*1000}));
+    console.log('%c[DEV OTP] '+localCode,'background:#c8a84b;color:#000;padding:4px 8px;font-weight:bold;font-size:14px');
+    var notice=document.getElementById('api-notice-login');
+    if(notice){
+      notice.textContent='⚠ Back-end offline. Código OTP no console do navegador (F12).';
+      notice.classList.add('show');
+    }
+  }
+
+  if(btn){btn.classList.remove('btn-loading','btn-loading-white');btn.disabled=false;btn.textContent='Enviar código →';}
+
+  // Show success msg + move to code step
+  var sm=document.getElementById('otp-sent-msg');
+  if(sm)sm.classList.add('show');
+  setTimeout(function(){
+    showOtpStep('code');
+    var dest=document.getElementById('otp-dest-email');
+    if(dest)dest.textContent=email;
+    // focus first digit
+    var first=document.querySelector('.otp-digit');
+    if(first)setTimeout(function(){first.focus();},100);
+    startOtpTimer();
+  },600);
+}
+
+function startOtpTimer(){
+  clearInterval(_otpTimerInt);
+  var secs=60;
+  var timer=document.getElementById('otp-timer');
+  var resend=document.getElementById('otp-resend-btn');
+  if(timer)timer.style.display='inline';
+  if(resend)resend.style.display='none';
+  _otpTimerInt=setInterval(function(){
+    secs--;
+    if(timer)timer.textContent='Reenviar em '+secs+'s';
+    if(secs<=0){
+      clearInterval(_otpTimerInt);
+      if(timer)timer.style.display='none';
+      if(resend){resend.style.display='inline';resend.disabled=false;}
+    }
+  },1000);
+}
+
+function otpKeyUp(input,idx){
+  // Auto-advance to next digit
+  var val=input.value.replace(/\D/g,'');
+  input.value=val.slice(0,1);
+  var digits=document.querySelectorAll('.otp-digit');
+  if(val&&idx<5)digits[idx+1].focus();
+  if(!val&&idx>0)digits[idx-1].focus();
+  // Enable verify button when all 6 filled
+  var code=Array.from(digits).map(function(d){return d.value;}).join('');
+  var vb=document.getElementById('otp-verify-btn');
+  if(vb)vb.disabled=code.length<6;
+  // Auto-submit when 6 digits complete
+  if(code.length===6)verifyOTPFront();
+}
+
+async function verifyOTPFront(){
+  var digits=document.querySelectorAll('.otp-digit');
+  var code=Array.from(digits).map(function(d){return d.value;}).join('');
+  clearErr('otp-code-err');
+  if(code.length<6){setErr('otp-code-err','Insira todos os 6 dígitos.');return;}
+
+  var btn=document.getElementById('otp-verify-btn');
+  if(btn){btn.classList.add('btn-loading','btn-loading-white');btn.disabled=true;btn.textContent='Verificando';}
+
+  var user=null;
+  var verified=false;
+
+  // Try real API
+  try{
+    var resp=await fetch(API_URL+'/auth/verify-otp',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:_otpEmail,code:code}),
+      signal:AbortSignal.timeout(4000)
+    });
+    var data=await resp.json();
+    if(data.success){
+      verified=true;
+      user={name:data.user.name,email:data.user.email};
+      if(data.token)localStorage.setItem('bt_jwt',data.token);
+    }else{
+      setErr('otp-code-err',data.message||'Código inválido.');
+    }
+  }catch(e){
+    // Fallback: verify local dev OTP
+    try{
+      var stored=JSON.parse(localStorage.getItem('_dev_otp')||'null');
+      if(stored&&stored.email===_otpEmail&&stored.code===code&&Date.now()<stored.exp){
+        verified=true;
+        // Find or create user in local store
+        var users2=getUsers();
+        var existing=users2.find(function(u){return u.email===_otpEmail;});
+        if(existing){user={name:existing.name,email:existing.email};}
+        else{
+          var newName=_otpEmail.split('@')[0];
+          user={name:newName,email:_otpEmail};
+          users2.push({name:newName,email:_otpEmail,createdAt:Date.now()});
+          saveUsers(users2);
+        }
+        localStorage.removeItem('_dev_otp');
+      }else if(stored&&stored.code!==code){
+        setErr('otp-code-err','Código incorreto. Verifique o console (F12).');
+      }else if(stored&&Date.now()>=stored.exp){
+        setErr('otp-code-err','Código expirado. Solicite um novo.');
+      }
+    }catch(e2){setErr('otp-code-err','Erro ao verificar. Tente novamente.');}
+  }
+
+  if(btn){btn.classList.remove('btn-loading','btn-loading-white');btn.disabled=false;btn.textContent='Verificar código →';}
+
+  if(verified&&user){
+    saveSession({name:user.name,email:user.email});
+    var ls=document.getElementById('login-success');
+    if(ls)ls.classList.add('show');
+    clearInterval(_otpTimerInt);
+    setTimeout(function(){
+      closeAuth();
+      applyAuthSession({name:user.name,email:user.email});
+      showToast('Olá, '+user.name+'! Bem-vindo de volta 👋','✓');
+    },900);
+  }
+}
+
+/* ─── Signup ─── */
+function doSignup(){
+  var name=document.getElementById('signup-name').value.trim();
+  var email=document.getElementById('signup-email').value.trim().toLowerCase();
+  var pass=document.getElementById('signup-pass').value;
+  clearErr('signup-name-err');clearErr('signup-email-err');clearErr('signup-pass-err');
+  var ok=true;
+  if(!name||name.length<2){setErr('signup-name-err','Nome deve ter ao menos 2 caracteres.');ok=false;}
+  if(!validateEmail(email)){setErr('signup-email-err','Informe um e-mail válido.');ok=false;}
+  if(pass.length<8){setErr('signup-pass-err','Mínimo 8 caracteres.');ok=false;}
+  if(!ok)return;
+  var users=getUsers();
+  if(users.find(function(u){return u.email===email;})){
+    setErr('signup-email-err','Este e-mail já está cadastrado.');return;
+  }
+  var btn=document.getElementById('signup-btn');
+  btn.classList.add('btn-loading','btn-loading-white');btn.disabled=true;btn.textContent='Criando';
+  setTimeout(function(){
+    var user={name:sanitize(name),email:email,pass:pass,phone:'',createdAt:Date.now(),orders:[]};
+    users.push(user);saveUsers(users);saveSession({name:user.name,email:user.email});
+    btn.classList.remove('btn-loading','btn-loading-white');btn.disabled=false;btn.textContent='Criar conta →';
+    document.getElementById('signup-success').classList.add('show');
+    setTimeout(function(){
+      closeAuth();
+      applyAuthSession({name:user.name,email:user.email});
+      showToast('Bem-vindo, '+user.name+'! 🎂','✓');
+    },1200);
+  },1000);
+}
+
+/* ─── Apply session to UI ─── */
+function applyAuthSession(user){
+  var authBtns=document.getElementById('auth-nav-btns');
+  var chip=document.getElementById('user-chip');
+  var chipName=document.getElementById('user-chip-name');
+  var chipAv=document.getElementById('user-av');
+  var ddName=document.getElementById('dropdown-name');
+  var ddEmail=document.getElementById('dropdown-email');
+  var firstName=user.name.split(' ')[0];
+
+  if(authBtns)authBtns.style.display='none';
+  if(chip){chip.style.display='flex';}
+  if(chipName)chipName.textContent='Olá, '+firstName;  // "Olá, " with space
+  if(chipAv)chipAv.textContent=user.name.charAt(0).toUpperCase();
+  if(ddName)ddName.textContent=user.name;
+  if(ddEmail)ddEmail.textContent=user.email||'';
+  applyName(user.name);
+}
+
+/* ─── Logout ─── */
+function doLogout(){
+  localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem('bt_jwt');
+  var authBtns=document.getElementById('auth-nav-btns');
+  var chip=document.getElementById('user-chip');
+  if(authBtns)authBtns.style.display='flex';
+  if(chip)chip.style.display='none';
+  var hs=document.getElementById('hero-sub');
+  if(hs)hs.innerHTML='A nova geração da confeitaria de alto desempenho. Sabor, elegância e precisão em cada camada.';
+  var mg=document.getElementById('models-greeting');
+  if(mg)mg.style.display='none';
+  showToast('Você saiu da conta.','👋');
+}
+
+/* ─── Restore session on load ─── */
+(function(){
+  var s=getSession();
+  if(s&&s.name)applyAuthSession(s);
+})();
+
+/* ─── Side modals: Profile & Orders ─── */
+function openSideModal(id){
+  closeSideModals(true);
+  document.getElementById(id).classList.add('open');
+  document.getElementById('side-ov').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSideModals(silent){
+  ['profile-modal','orders-modal'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.classList.remove('open');
+  });
+  var ov=document.getElementById('side-ov');
+  if(ov)ov.classList.remove('open');
+  if(!silent)document.body.style.overflow='';
+}
+
+function openProfileModal(){
+  var s=getSession();
+  if(!s)return;
+  var users=getUsers();
+  var u=users.find(function(x){return x.email===s.email;})||s;
+  var bigAv=document.getElementById('profile-av-big');
+  var bigName=document.getElementById('profile-av-name');
+  var bigEmail=document.getElementById('profile-av-email');
+  var ni=document.getElementById('profile-name-input');
+  var ei=document.getElementById('profile-email-input');
+  var pi=document.getElementById('profile-phone-input');
+  if(bigAv)bigAv.textContent=s.name.charAt(0).toUpperCase();
+  if(bigName)bigName.textContent=s.name;
+  if(bigEmail)bigEmail.textContent=s.email;
+  if(ni)ni.value=u.name||s.name;
+  if(ei)ei.value=s.email;
+  if(pi)pi.value=u.phone||'';
+  openSideModal('profile-modal');
+}
+
+function saveProfile(){
+  var s=getSession();if(!s)return;
+  var newName=document.getElementById('profile-name-input').value.trim();
+  var phone=document.getElementById('profile-phone-input').value.trim();
+  if(!newName||newName.length<2){showToast('Nome inválido.','✗');return;}
+  var users=getUsers();
+  var idx=users.findIndex(function(u){return u.email===s.email;});
+  if(idx>-1){users[idx].name=sanitize(newName);users[idx].phone=phone;}
+  saveUsers(users);
+  var newSession={name:sanitize(newName),email:s.email};
+  saveSession(newSession);
+  applyAuthSession(newSession);
+  // Update profile display
+  var bn=document.getElementById('profile-av-name');
+  if(bn)bn.textContent=sanitize(newName);
+  showToast('Perfil atualizado!','✓');
+}
+
+function openOrdersModal(){
+  var s=getSession();
+  var users=getUsers();
+  var u=s?users.find(function(x){return x.email===s.email;}):null;
+  var orders=(u&&u.orders)||JSON.parse(localStorage.getItem('bt_orders')||'[]');
+  var list=document.getElementById('orders-list');
+  var empty=document.getElementById('orders-empty');
+  if(list&&empty){
+    if(!orders||orders.length===0){
+      empty.style.display='block';list.innerHTML='';
+    }else{
+      empty.style.display='none';
+      list.innerHTML=orders.map(function(o){
+        return '<div class="order-card">'+
+          '<div class="order-card-top">'+
+          '<span class="order-card-id">'+(o.id||'#—')+'</span>'+
+          '<span class="order-card-date">'+(o.date||o.createdAt||'—')+'</span>'+
+          '</div>'+
+          '<div class="order-card-model">'+(o.modelo||'Bolo personalizado')+'</div>'+
+          '<div class="order-card-detail">'+(o.recheio||'')+(o.cobertura?' · '+o.cobertura:'')+'</div>'+
+          '<div class="order-card-total">'+(o.total||'—')+'</div>'+
+          '</div>';
+      }).join('');
+    }
+  }
+  openSideModal('orders-modal');
+}
+
+/* Save order reference to user on confirmOrder */
+var _origConfirmOrder=confirmOrder;
+confirmOrder=function(btn){
+  // Save order to local history
+  var s=getSession();
+  var newOrder={
+    id:'BT-'+String(Date.now()).slice(-6),
+    modelo:cpLabels&&cpLabels.modelo||'—',
+    recheio:cpLabels&&cpLabels.recheio||'—',
+    cobertura:cpLabels&&cpLabels.cobertura||'—',
+    total:document.getElementById('ms-total')&&document.getElementById('ms-total').textContent||'—',
+    date:new Date().toLocaleDateString('pt-BR'),
+  };
+  // Store in user profile or global list
+  var allOrders=JSON.parse(localStorage.getItem('bt_orders')||'[]');
+  allOrders.unshift(newOrder);
+  localStorage.setItem('bt_orders',JSON.stringify(allOrders.slice(0,50)));
+  if(s){
+    var users=getUsers();
+    var idx=users.findIndex(function(u){return u.email===s.email;});
+    if(idx>-1){if(!users[idx].orders)users[idx].orders=[];users[idx].orders.unshift(newOrder);}
+    saveUsers(users);
+  }
+  // Also POST to API
+  if(s){
+    var orderPayload={
+      clientName:s.name,clientEmail:s.email,
+      modelo:newOrder.modelo,recheio:newOrder.recheio,
+      cobertura:newOrder.cobertura,total:newOrder.total,
+      camadas:document.getElementById('s-camadas')&&document.getElementById('s-camadas').textContent||'—',
+      cor:cpLabels&&cpLabels.cor||'—',
+    };
+    fetch(API_URL+'/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(orderPayload)}).catch(function(){});
+  }
+  _origConfirmOrder(btn);
+};
+
+/* ─── Mobile menu ─── */
+function toggleMobileMenu(){
+  var mm=document.getElementById('mobile-menu');
+  var hb=document.getElementById('hamburger');
+  mm.classList.toggle('open');hb.classList.toggle('open');
+  document.body.style.overflow=mm.classList.contains('open')?'hidden':'';
+}
+function closeMobileMenu(){
+  var mm=document.getElementById('mobile-menu');
+  var hb=document.getElementById('hamburger');
+  if(mm)mm.classList.remove('open');if(hb)hb.classList.remove('open');
+  document.body.style.overflow='';
+}
+window.addEventListener('resize',function(){if(window.innerWidth>768)closeMobileMenu();},{passive:true});
+function resetName(){if(confirm('Redefinir seu nome?')){localStorage.removeItem('bt_name');location.reload();}}
+
+/* ─── ESC closes everything ─── */
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){closeAuth();closeMobileMenu();closeSideModals();}
+});
+</script>
+<!-- SIDE MODAL OVERLAY (shared) -->
+<div class="side-modal-ov" id="side-ov" onclick="closeSideModals()"></div>
+
+<!-- PROFILE MODAL -->
+<div class="side-modal" id="profile-modal">
+  <div class="side-modal-head">
+    <span class="side-modal-title">Meu Perfil</span>
+    <button class="side-modal-close" onclick="closeSideModals()">&times;</button>
+  </div>
+  <div class="side-modal-body">
+    <div class="pav-section">
+      <div class="pav-big" id="profile-av-big">?</div>
+      <div class="pav-name" id="profile-av-name">—</div>
+      <div class="pav-email" id="profile-av-email">—</div>
+    </div>
+    <div class="p-field">
+      <label class="p-label">Nome</label>
+      <input class="p-input" id="profile-name-input" type="text" placeholder="Seu nome" maxlength="50">
+    </div>
+    <div class="p-field">
+      <label class="p-label">E-mail</label>
+      <input class="p-input" id="profile-email-input" type="email" placeholder="seu@email.com" readonly
+        style="opacity:.5;cursor:not-allowed">
+    </div>
+    <div class="p-field">
+      <label class="p-label">Telefone (opcional)</label>
+      <input class="p-input" id="profile-phone-input" type="tel" placeholder="(51) 9 0000-0000">
+    </div>
+    <button class="p-save shine rpl" onclick="saveProfile()">Salvar alterações</button>
+    <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--line)">
+      <button class="btn-s" style="width:100%;padding:11px;color:rgba(231,76,60,.8);
+        border-color:rgba(231,76,60,.3)" onclick="doLogout();closeSideModals()">
+        Sair da conta
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ORDERS MODAL -->
+<div class="side-modal" id="orders-modal">
+  <div class="side-modal-head">
+    <span class="side-modal-title">Meus Pedidos</span>
+    <button class="side-modal-close" onclick="closeSideModals()">&times;</button>
+  </div>
+  <div class="side-modal-body" id="orders-modal-body">
+    <div class="orders-empty" id="orders-empty">
+      <div style="font-size:2rem;margin-bottom:1rem">🎂</div>
+      <p>Você ainda não fez nenhum pedido.</p>
+      <p style="margin-top:.5rem">
+        <button class="btn-p shine" style="margin-top:.75rem"
+          onclick="closeSideModals();openModal()">Fazer primeiro pedido →</button>
+      </p>
+    </div>
+    <div id="orders-list"></div>
+  </div>
+</div>
+
+</body>
+</html>

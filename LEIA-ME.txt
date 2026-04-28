@@ -1,0 +1,1 @@
+A marca **Boloungerie Turbo** não existe de fato. Ela foi criada apenas como um projeto fictício, com o objetivo de diversão e prática de programação. A ideia surgiu como uma forma de treinar habilidades no desenvolvimento de sites, design e funcionalidades, simulando uma marca real, mas sem qualquer vínculo comercial ou existência oficial.
